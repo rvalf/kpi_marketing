@@ -21,7 +21,7 @@
                         <th scope="row">{{ $loop->index+1 }}</th>
                         <td>{{ $div->name }}</td>
                         <td class="text-center">
-                            <a href="" class="btn btn-primary"><i class="ti ti-edit"></i> Edit</a>
+                            <a href="{{ route('div.edit', ['id' => $div->id ]) }}" class="btn btn-primary"><i class="ti ti-edit"></i> Edit</a>
                         </td>
                         <td class="text-center">
                             <a href="" class="btn btn-danger"><i class="ti ti-trash-x"></i> Delete</a>

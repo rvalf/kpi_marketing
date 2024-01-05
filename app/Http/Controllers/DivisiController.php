@@ -63,7 +63,9 @@ class DivisiController extends Controller
      */
     public function edit($id)
     {
-        //
+        $divisi = Divisi::findOrFail($id);
+
+        return view('divisi.edit', compact('divisi'));
     }
 
     /**
@@ -75,7 +77,14 @@ class DivisiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $divisi = Divisi::findOrFail($id);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        if ($divisi->update($validatedData)) {
+            return redirect(route('div.index'))->with('success', 'Updated Successfully');
+        }
     }
 
     /**

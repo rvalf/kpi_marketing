@@ -29,4 +29,6 @@ Route::get('staff/index', [UserController::class, 'index'])->name('staff.index')
 // Divisi
 Route::get('divisi/index', [DivisiController::class, 'index'])->name('div.index');
 Route::get('divisi/add', [DivisiController::class, 'create'])->name('div.create');
+Route::get('divisi/edit/{id}', [DivisiController::class, 'edit'])->name('div.edit');
 Route::post('divisi/store', [DivisiController::class, 'store'])->name('div.store');
+Route::put('divisi/update/{id}', [DivisiController::class, 'update'])->name('div.update');
