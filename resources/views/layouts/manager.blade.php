@@ -60,7 +60,7 @@
                                 <span class="hide-menu">ACTIVITY</span>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('act.index') }}" aria-expanded="false">
                                     <span>
                                         <i class="ti ti-list-details"></i>
                                     </span>

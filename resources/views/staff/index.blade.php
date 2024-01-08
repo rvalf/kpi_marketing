@@ -4,8 +4,106 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Index Staff</h5>
-            <p class="mb-0">This is a list staff page </p>
+            <a href="{{ route('staff.create') }}" class="btn btn-outline-secondary my-1"><i
+                    class="ti ti-plus pe-2"></i>Add New</a>
+            <h5 class="card-title fw-semibold my-4">Staff List</h5>
+            <table class="table table-bordered border-1">
+                <thead>
+                    <tr>
+                        <th scope="col" width="30">No</th>
+                        <th scope="col" class="text-center">Name</th>
+                        <th scope="col" class="text-center">Email</th>
+                        <th scope="col" class="text-center">Divisi</th>
+                        <th scope="col" class="text-center">Account</th>
+                        <th scope="col" class="text-center">Delete</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @if($staffs->isEmpty())
+                    <tr>
+                        <td colspan="4">Data is empty! Click Add New to fill this section.</td>
+                    </tr>
+                    @endif
+                    @foreach ($staffs as $staff)
+                    <tr>
+                        <th scope="row">{{ $loop->index+1 }}</th>
+                        <td>{{ $staff->fullname }}</td>
+                        <td>{{ $staff->email }}</td>
+                        <td>{{ $staff->divisi->name }}</td>
+                        <td class="text-center">
+                            <button data-bs-toggle="modal" data-bs-target="#showModal_{{ $staff->id }}"
+                                class="btn btn-secondary"><i class="ti ti-eye"></i> Show</button>
+                        </td>
+                        <div class="modal fade" id="showModal_{{ $staff->id }}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Staff Profile</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div class="row ps-3">
+                                                <div class="col-sm-3">
+                                                    <p>Username </p>
+                                                    <p>Name </p>
+                                                    <p>Email </p>
+                                                    <p>Divisi </p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <p class="fw-semi-bold">: {{ $staff->username }}</p>
+                                                    <p class="fw-semi-bold">: {{ $staff->fullname }}</p>
+                                                    <p class="fw-semi-bold">: {{ $staff->email }}</p>
+                                                    <p class="fw-semi-bold">: {{ $staff->divisi->name }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <td class="text-center">
+                            <a href="" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal_{{ $staff->id }}"><i class="ti ti-trash-x"></i></a>
+                        </td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="deleteModal_{{ $staff->id }}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-center m-0">Are you sure want to delete this?</p>
+                                        <P class="text-center m-0">The data will be removed from the database.</P>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <form id="deleteForm_{{ $staff->id }}"
+                                            action="{{ route('staff.delete', ['id' => $staff->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

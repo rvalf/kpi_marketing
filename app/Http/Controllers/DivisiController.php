@@ -39,6 +39,7 @@ class DivisiController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
         ]);
+
         $divisi = Divisi::create($validatedData);
         $divisi->save();
         return redirect(route('div.index'))->with('success', 'Created Successfully');
@@ -95,6 +96,11 @@ class DivisiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $divisi = Divisi::findOrFail($id);
+        if ($divisi->delete()){
+            return redirect(route('div.index'))->with('success', 'Deleted Successfully');
+        }
+
+        return redirect(route('div.index'))->with('error', 'Sorry, unable to delete this');
     }
 }

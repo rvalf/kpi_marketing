@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('manager.dashboard');
+        $user = Auth::user();
+
+        if ($user->divisi_id != null) {
+            return redirect()->route('dashboard.staff');
+        } else {
+            return view('manager.dashboard');
+        }
     }
 }

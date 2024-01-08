@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Models\Divisi;
-use App\Models\User;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class ActivityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +14,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $staffs = User::whereNotNull('divisi_id')->get();
-        return view('staff.index', compact('staffs'));
+        $acts = Activity::all();
+        return view('activity.index', compact('acts'));
     }
 
     /**
@@ -27,8 +25,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $divisis = Divisi::orderBy('name', 'asc')->get()->pluck('name', 'id');
-        return view('staff.create', compact('divisis'));
+        return view('activity.create');
     }
 
     /**
@@ -37,13 +34,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        $params = $request->validated();
-        $params['password'] = bcrypt($request->password);
-        if ($user = User::create($params)){
-            return redirect(route('staff.index'))->with('success', 'Created Successfully');
-        }
+        //
     }
 
     /**
@@ -88,11 +81,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        if ($user->delete()){
-            return redirect(route('staff.index'))->with('success', 'Deleted Successfully');
-        }
-
-        return redirect(route('staff.index'))->with('error', 'Sorry, unable to delete this');
+        //
     }
 }

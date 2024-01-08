@@ -10,7 +10,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">Divisi Name</label>
-                    <input type="text" class="form-control" id="name" name="namei" aria-describedby="inputExplain" value="{{ old('divisi', $divisi->name) }}">
+                    <input type="text" class="form-control" id="name" name="name" aria-describedby="inputExplain" value="{{ old('divisi', $divisi->name) }}">
                     <div id="inputExplain" class="form-text">example: Marketing, Sales, Admin, etc.</div>
                 </div>
                 <input type="submit" class="btn btn-primary"></input>

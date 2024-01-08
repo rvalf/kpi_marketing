@@ -26,7 +26,11 @@ class User extends Authenticatable
     ];
 
     public function divisi() {
-        $this->belongsTo(Divisi::class);
+        return $this->belongsTo(Divisi::class);
+    }    
+
+    public function initiatives() {
+        return $this->hasMany(Initiative::class);
     }
 
     /**
