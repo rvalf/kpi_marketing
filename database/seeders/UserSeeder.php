@@ -17,13 +17,13 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $divisi = Divisi::firstOrCreate(['name' => 'Marketing']);
+        $divisi = Divisi::firstOrCreate(['name' => 'Manager']);
 
         $user = new User();
-        $user->username = 'marketing001';
-        $user->fullname = 'Revalina Fitriani';
-        $user->email = 'dummy@example.com';
-        $user->password = Hash::make('marketing2024');
+        $user->username = 'manager01';
+        $user->fullname = 'Qonita';
+        $user->email = 'qonita@example.com';
+        $user->password = Hash::make('password');
         $user->divisi_id = $divisi->id;
         $user->save();
     }

@@ -26,7 +26,7 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->divisi_id != null) {
+        if ($user->divisi->name != 'Manager') {
             return redirect()->route('dashboard.staff');
         } else {
             return view('manager.dashboard');
