@@ -17,9 +17,22 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JavaScript (Popper.js is required) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Templates -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/logo_astra_square.png') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/styles.min.css') }}" />
+
+    <style>
+    .table .bg-success th,
+    .table .bg-success td {
+        color: white;
+    }
+    </style>
 </head>
 
 <body>
@@ -152,7 +165,7 @@
                 </header>
                 <!--  Header End -->
 
-                
+
                 @yield('content')
             </div>
         </div>
@@ -163,6 +176,29 @@
         <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
         <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
         <script src="../assets/js/dashboard.js"></script>
+
+        <script>
+        $(document).ready(function() {
+            $('.dropdown-item.show-initiative').click(function(e) {
+                e.preventDefault();
+                $(this).closest('tr').next('tr').toggle();
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            var tableBody = document.getElementById('table-body');
+            var rowNumber = 1;
+
+            // Loop melalui setiap baris tabel
+            for (var i = 0; i < tableBody.rows.length; i++) {
+                var currentRow = tableBody.rows[i];
+
+                // Jika baris memiliki elemen dengan th scope="row", set nomornya
+                if (currentRow.querySelector('th[scope="row"]')) {
+                    currentRow.querySelector('th[scope="row"]').textContent = rowNumber++;
+                }
+            }
+        });
+        </script>
     </body>
 </body>
 
