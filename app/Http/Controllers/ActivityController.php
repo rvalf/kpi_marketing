@@ -36,7 +36,21 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validatedData = $request->validate([
+                'status' => 'required',
+                'objective' => 'required',
+                'weight' => 'required',
+                'target_type' => 'required',
+                'target' => 'required',
+            ]);
+    
+            Activity::create($validatedData);
+    
+            return redirect(route('act.index'))->with('success', 'Created Successfully');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to create: ' . $e->getMessage());
+        }    
     }
 
     /**
@@ -58,7 +72,10 @@ class ActivityController extends Controller
      */
     public function edit($id)
     {
-        //
+        $activity = Activity::findOrFail($id);
+
+        return view('act.edit', compact('activity'));
+
     }
 
     /**
@@ -70,7 +87,21 @@ class ActivityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $activity = Activity::findOrFail($id);
+        $validatedData = $request->validate([
+            'status' => 'required', 
+            'objective' => 'required',
+            'weight' => 'required',
+            'target_type' => 'required',
+            'target' => 'required',
+         ]);
+
+        if ($activity->update($validatedData)) {
+            return redirect(route('act.index'))->with('success', 'Updated Successfully');
+        } else {
+            // Handle the case where the update fails
+            return redirect()->back()->with('error', 'Failed to update');
+        }
     }
 
     /**
@@ -81,6 +112,11 @@ class ActivityController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $activity = Activity::findOrFail($id);
+        if ($activity->delete()) {
+            return redirect(route('act.index'))->with('success', 'Deleted Successfully');
+        }
+
+        return redirect(route('act.index'))->with('error', 'Sorry, unable to delete this');
     }
 }

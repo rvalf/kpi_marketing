@@ -33,12 +33,12 @@
                         <td>{{ $act->target }}</td>
                         <td>{{ $act->type }}</td>
                         <td class="text-center">
-                            <button data-bs-toggle="modal" data-bs-target="#showModal_{{ $staff->id }}"
+                            <button data-bs-toggle="modal" data-bs-target="#showModal_{{ $act->id }}"
                                 class="btn btn-secondary"><i class="ti ti-eye"></i> Show</button>
                         </td>
                         <td class="text-center">
                             <a href="" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteModal_{{ $staff->id }}"><i class="ti ti-trash-x"></i></a>
+                                data-bs-target="#deleteModal_{{ $act->id }}"><i class="ti ti-trash-x"></i></a>
                         </td>
                     </tr>
                     @endforeach
