@@ -23,7 +23,7 @@
                             <select id="activity" class="form-select" name="activity_id" required>
                                 <option value="">Select Activity</option>
                                 @foreach ($acts as $actId => $act)
-                                <option value="{{ $actId }}">{{ $act->objective }}</option>
+                                <option value="{{ $actId }}">{{ $act }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -61,7 +61,7 @@
                             <select id="user" class="form-select" name="user_id" required>
                                 <option value="">Select Staff</option>
                                 @foreach ($users as $userId => $user)
-                                <option value="{{ $userId }}">{{ $user->fullname }}</option>
+                                <option value="{{ $userId }}">{{ $user }}</option>
                                 @endforeach
                             </select>
                         </div>

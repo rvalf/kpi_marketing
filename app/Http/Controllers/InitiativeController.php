@@ -17,7 +17,8 @@ class InitiativeController extends Controller
     public function index()
     {
         $inits = Initiative::all();
-        return view('initiative.index', compact('inits'));
+        $acts = Activity::all();
+        return view('initiative.index', compact('inits', 'acts'));
     }
 
     /**
@@ -27,7 +28,7 @@ class InitiativeController extends Controller
      */
     public function create()
     {
-        $acts = Activity::orderBy('objective', 'asc')->get()->pluck('objective', 'id');;
+        $acts = Activity::orderBy('objective', 'asc')->get()->pluck('objective', 'id');
         $users = User::where('divisi_id', '!=', '1')->orderBy('fullname', 'asc')->get()->pluck('fullname', 'id');
         return view('initiative.create', compact('acts', 'users'));
     }
@@ -40,14 +41,14 @@ class InitiativeController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->input('activity_id'));
+        // dd($request->all());
         try {
             $validatedData = $request->validate([
+                'activity_id' => 'required',
                 'initiative' => 'required',
                 'weight' => 'required',
                 'target_type' => 'required',
                 'target' => 'required',
-                'activity_id' => 'required',
                 'user_id' => 'required',
             ]);
     
@@ -55,7 +56,8 @@ class InitiativeController extends Controller
     
             return redirect(route('init.index'))->with('success', 'Created Successfully');
         }catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to create: ' . $e->getMessage());
+            return redirect(route('init.create'))->withErrors(['error' => 'Error: ' . $e->getMessage()]);
+            // return redirect()->back()->with('error', 'Failed to create: ' . $e->getMessage());
         }
     }
 

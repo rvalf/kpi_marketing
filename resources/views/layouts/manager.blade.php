@@ -178,7 +178,7 @@
 
         <script>
         $(document).ready(function() {
-            $('.dropdown-item.show-initiative').click(function(e) {
+            $('.show-initiative').click(function(e) {
                 e.preventDefault();
                 $(this).closest('tr').next('tr').toggle();
             });
