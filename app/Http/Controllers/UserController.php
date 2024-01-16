@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $staffs = User::whereNotNull('divisi_id')->get();
+        $staffs = User::where('divisi_id', '!=', '1')->get();
         return view('staff.index', compact('staffs'));
     }
 
@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $divisis = Divisi::orderBy('name', 'asc')->get()->pluck('name', 'id');
+        $divisis = Divisi::where('name', '!=', 'Manager')->orderBy('name', 'asc')->get()->pluck('name', 'id');
         return view('staff.create', compact('divisis'));
     }
 

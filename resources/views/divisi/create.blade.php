@@ -12,7 +12,7 @@
                     <input type="text" class="form-control" id="name" name="name" aria-describedby="inputExplain">
                     <div id="inputExplain" class="form-text">example: Marketing, Sales, Admin, etc.</div>
                 </div>
-                <input type="submit" class="btn btn-primary"></input>
+                <input type="submit" value="Submit" class="btn btn-primary"></input>
             </form>
         </div>
     </div>

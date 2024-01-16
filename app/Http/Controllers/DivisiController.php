@@ -14,7 +14,7 @@ class DivisiController extends Controller
      */
     public function index()
     {
-        $divisis = Divisi::all();
+        $divisis = Divisi::where('name', '!=', 'Manager')->get();
         return view('divisi.index', compact('divisis'));
     }
 

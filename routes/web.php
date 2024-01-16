@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\DivisiController;
+use App\Http\Controllers\InitiativeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,3 +50,11 @@ Route::get('activity/edit/{id}', [ActivityController::class, 'edit'])->name('act
 Route::post('activity/store', [ActivityController::class, 'store'])->name('act.store');
 Route::put('activity/update/{id}', [ActivityController::class, 'update'])->name('act.update');
 Route::delete('activity/delete/{id}', [ActivityController::class, 'destroy'])->name('act.delete');
+
+// Initiative
+Route::get('initiative/index', [InitiativeController::class, 'index'])->name('init.index');
+Route::get('initiative/add', [InitiativeController::class, 'create'])->name('init.create');
+Route::get('initiative/edit/{id}', [InitiativeController::class, 'edit'])->name('init.edit');
+Route::post('initiative/store', [InitiativeController::class, 'store'])->name('init.store');
+Route::put('initiative/update/{id}', [InitiativeController::class, 'update'])->name('init.update');
+Route::delete('initiative/delete/{id}', [InitiativeController::class, 'destroy'])->name('init.delete');

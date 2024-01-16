@@ -9,7 +9,7 @@ class Initiative extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['initiative', 'weight', 'target_type', 'target', 'status'];
+    protected $fillable = ['initiative', 'weight', 'target_type', 'target', 'activity_id', 'user_id'];
 
     public function activity() {
         return $this->belongsTo(Activity::class);

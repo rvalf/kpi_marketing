@@ -23,7 +23,7 @@
                     <tr>
                         <td colspan="4">Data is empty! Click Add New to fill this section.</td>
                     </tr>
-                    @endif
+                    @else
                     <tr>
                         <th colspan="3" class="ps-2 pt-3 m-0">
                             <span class="bg-primary p-1 px-2 text-white rounded-2 m-0" style="width: fit-content">Wildly
@@ -46,8 +46,7 @@
                         <td>
                             <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25"
                                 aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-success" style="width: 50%">
-                                    <p style="font-size: 10px; padding-top: 50%;">50%</p>
+                                <div class="progress-bar bg-success" style="width: 50%">50%
                                 </div>
                             </div>
                         </td>
@@ -105,8 +104,7 @@
                         <td>
                             <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25"
                                 aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-success" style="width: 50%">
-                                    <p style="font-size: 10px; padding-top: 50%;">50%</p>
+                                <div class="progress-bar bg-success" style="width: 50%">50%
                                 </div>
                             </div>
                         </td>
@@ -141,6 +139,7 @@
                     </tr>
                     @endif
                     @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

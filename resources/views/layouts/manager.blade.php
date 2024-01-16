@@ -81,7 +81,7 @@
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('init.index') }}" aria-expanded="false">
                                     <span>
                                         <i class="ti ti-subtask"></i>
                                     </span>
@@ -164,7 +164,6 @@
                     </nav>
                 </header>
                 <!--  Header End -->
-
 
                 @yield('content')
             </div>

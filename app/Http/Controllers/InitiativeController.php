@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\Initiative;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class InitiativeController extends Controller
@@ -13,7 +16,8 @@ class InitiativeController extends Controller
      */
     public function index()
     {
-        //
+        $inits = Initiative::all();
+        return view('initiative.index', compact('inits'));
     }
 
     /**
@@ -23,7 +27,9 @@ class InitiativeController extends Controller
      */
     public function create()
     {
-        //
+        $acts = Activity::orderBy('objective', 'asc')->get()->pluck('objective', 'id');;
+        $users = User::where('divisi_id', '!=', '1')->orderBy('fullname', 'asc')->get()->pluck('fullname', 'id');
+        return view('initiative.create', compact('acts', 'users'));
     }
 
     /**
@@ -34,7 +40,23 @@ class InitiativeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->input('activity_id'));
+        try {
+            $validatedData = $request->validate([
+                'initiative' => 'required',
+                'weight' => 'required',
+                'target_type' => 'required',
+                'target' => 'required',
+                'activity_id' => 'required',
+                'user_id' => 'required',
+            ]);
+    
+            Initiative::create($validatedData);
+    
+            return redirect(route('init.index'))->with('success', 'Created Successfully');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to create: ' . $e->getMessage());
+        }
     }
 
     /**
