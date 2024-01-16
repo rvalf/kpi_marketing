@@ -7,7 +7,7 @@
             <a href="{{ route('act.create') }}" class="btn btn-outline-secondary my-1"><i
                     class="ti ti-plus pe-2"></i>Add New</a>
             <h5 class="card-title fw-semibold my-4">Activity Plan</h5>
-            <table class="table table-bordered border-1 table-group-divider" id="table-body">
+            <table class="table table-bordered table-sm" id="table-body">
                 <thead>
                     <tr>
                         <th scope="col" width="30">NO</th>
@@ -25,7 +25,7 @@
                     </tr>
                     @else
                     <tr>
-                        <th colspan="3" class="ps-2 pt-3 m-0">
+                        <th colspan="3" class="pt-2 m-0">
                             <span class="bg-primary p-1 px-2 text-white rounded-2 m-0" style="width: fit-content">Wildly
                                 Important Goal (WIG)</span><span class="fw-bold ps-2">{{ $WIGWeight }} %</span>
                         </th>
@@ -83,7 +83,7 @@
                     @endif
                     @endforeach
                     <tr>
-                        <th colspan="3" class="ps-2 pt-3 m-0">
+                        <th colspan="3" class="pt-2 m-0">
                             <span class="bg-secondary p-1 px-2 text-white rounded-2 m-0" style="width: fit-content">
                                 Important Goal (IG)</span><span class="fw-bold ps-2">{{ $IGWeight }} %</span>
                         </th>
