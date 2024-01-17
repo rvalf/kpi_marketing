@@ -32,6 +32,30 @@
     .table .bg-success td {
         color: white;
     }
+
+    .border-grey {
+        border: solid 1px #e3e3e3;
+    }
+
+    p.sub-title {
+        font-size: 10px;
+        margin-bottom: 2px;
+        text-decoration: underline;
+    }
+
+    .table-detail th,
+    .table-detail td {
+        font-size: 13px;
+    }
+
+    .table-detail th {
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+
+    .dropdown button::after {
+        content: none;
+    }
     </style>
 </head>
 
@@ -178,25 +202,32 @@
 
         <script>
         $(document).ready(function() {
-            $('.show-initiative').click(function(e) {
+            // $('.show-initiative').click(function(e) {
+            //     e.preventDefault();
+            //     $(this).closest('tr').next('tr').toggle();
+            // });
+
+            $('.show-detail').on('click', function(e) {
                 e.preventDefault();
-                $(this).closest('tr').next('tr').toggle();
+                var parentCard = $(this).closest('.card-body');
+                parentCard.find('.details').slideToggle();
+                return false;
             });
         });
-        document.addEventListener('DOMContentLoaded', function() {
-            var tableBody = document.getElementById('table-body');
-            var rowNumber = 1;
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     var tableBody = document.getElementById('table-body');
+        //     var rowNumber = 1;
 
-            // Loop melalui setiap baris tabel
-            for (var i = 0; i < tableBody.rows.length; i++) {
-                var currentRow = tableBody.rows[i];
+        //     // Loop melalui setiap baris tabel
+        //     for (var i = 0; i < tableBody.rows.length; i++) {
+        //         var currentRow = tableBody.rows[i];
 
-                // Jika baris memiliki elemen dengan th scope="row", set nomornya
-                if (currentRow.querySelector('th[scope="row"]')) {
-                    currentRow.querySelector('th[scope="row"]').textContent = rowNumber++;
-                }
-            }
-        });
+        //         // Jika baris memiliki elemen dengan th scope="row", set nomornya
+        //         if (currentRow.querySelector('th[scope="row"]')) {
+        //             currentRow.querySelector('th[scope="row"]').textContent = rowNumber++;
+        //         }
+        //     }
+        // });
         </script>
     </body>
 </body>

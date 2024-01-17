@@ -14,11 +14,18 @@ class InitiativeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private string $wig = 'Wildly Important Goal (WIG)';
+    private string $ig = 'Important Goal (IG)';
+    
     public function index()
     {
-        $inits = Initiative::all();
         $acts = Activity::all();
-        return view('initiative.index', compact('inits', 'acts'));
+        $actWIG = Activity::where('status', $this->wig)->get();
+        $actIG = Activity::where('status', $this->ig)->get();
+        $WIGWeight = Activity::where('status', $this->wig)->sum('weight');
+        $IGWeight = Activity::where('status', $this->ig)->sum('weight');
+        return view('initiative.index', compact('acts', 'actWIG', 'actIG', 'WIGWeight', 'IGWeight'));
     }
 
     /**
@@ -26,11 +33,11 @@ class InitiativeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($act_id)
     {
-        $acts = Activity::orderBy('objective', 'asc')->get()->pluck('objective', 'id');
+        $act = Activity::findOrFail($act_id);
         $users = User::where('divisi_id', '!=', '1')->orderBy('fullname', 'asc')->get()->pluck('fullname', 'id');
-        return view('initiative.create', compact('acts', 'users'));
+        return view('initiative.create', compact('users', 'act'));
     }
 
     /**
@@ -41,7 +48,6 @@ class InitiativeController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         try {
             $validatedData = $request->validate([
                 'activity_id' => 'required',
@@ -57,7 +63,6 @@ class InitiativeController extends Controller
             return redirect(route('init.index'))->with('success', 'Created Successfully');
         }catch (\Exception $e) {
             return redirect(route('init.create'))->withErrors(['error' => 'Error: ' . $e->getMessage()]);
-            // return redirect()->back()->with('error', 'Failed to create: ' . $e->getMessage());
         }
     }
 
@@ -80,7 +85,9 @@ class InitiativeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $init = Initiative::findOrFail($id);
+        $users = User::where('divisi_id', '!=', '1')->orderBy('fullname', 'asc')->get()->pluck('fullname', 'id');
+        return view('initiative.edit', compact('init', 'users'));
     }
 
     /**
@@ -92,7 +99,21 @@ class InitiativeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $init = Initiative::findOrFail($id);
+        
+        $validatedData = $request->validate([
+            'initiative' => 'required',
+            'weight' => 'required',
+            'target_type' => 'required',
+            'target' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        if ($init->update($validatedData)) {
+            return redirect(route('init.index'))->with('success', 'Updated Successfully');
+        } else {
+            return redirect()->back()->with('error', 'Failed to update');
+        }
     }
 
     /**
@@ -103,6 +124,11 @@ class InitiativeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $init = Initiative::findOrFail($id);
+        if ($init->delete()) {
+            return redirect(route('init.index'))->with('success', 'Deleted Successfully');
+        }
+
+        return redirect(route('init.index'))->with('error', 'Sorry, unable to delete this');
     }
 }

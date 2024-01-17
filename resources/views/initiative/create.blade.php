@@ -18,15 +18,7 @@
                     <h5 class="card-title fw-semibold my-2">Add New Initiative</h5>
                     <form action="{{ route('init.store') }}" method="post">
                         @csrf
-                        <div class="mb-3">
-                            <label for="activity" class="form-label">Activity</label>
-                            <select id="activity" class="form-select" name="activity_id" required>
-                                <option value="">Select Activity</option>
-                                @foreach ($acts as $actId => $act)
-                                <option value="{{ $actId }}">{{ $act }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <input type="hidden" name="activity_id" value="{{ $act->id }}">
                         <div class="mb-3">
                             <label for="initiative" class="form-label">Initiative</label>
                             <textarea class="form-control" id="initiative" name="initiative"
@@ -70,6 +62,30 @@
                             <a href="{{ route('init.index') }}" class="btn btn-danger">Back</a>
                         </div>
                     </form>
+                </div>
+                <div class="col-sm-5 ps-4 border-start border-3">
+                    <div class="border rounded-2 border-1 p-2 mb-3">
+                        <p class="fw-bolder mb-1">{{ $act->objective }}</p>
+                    </div>
+                    <table class="table table-sm table-detail">
+                        <thead>
+                            <tr>
+                                <th scope="col">Initiative</th>
+                                <th scope="col">Weight</th>
+                                <th scope="col">Target</th>
+                                <th scope="col">PIC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($act->initiatives as $init)
+                            <tr>
+                                <td>{{ $init->initiative }}</td>
+                                <td>{{ $init->weight }} %</td>
+                                <td>{{ $init->target }} %</td>
+                                <td>{{ $init->user->fullname }}</td>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

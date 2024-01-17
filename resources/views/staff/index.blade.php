@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="card">
+    <div class="card border">
         <div class="card-body">
             <a href="{{ route('staff.create') }}" class="btn btn-outline-secondary my-1"><i
                     class="ti ti-plus pe-2"></i>Add New</a>
             <h5 class="card-title fw-semibold my-4">Staff List</h5>
-            <table class="table table-sm table-bordered">
+            <table class="table table-sm table-bordered table-hover">
                 <thead>
                     <tr>
                         <th scope="col" width="30">No</th>
@@ -26,7 +26,7 @@
                     @endif
                     @foreach ($staffs as $staff)
                     <tr>
-                        <th scope="row">{{ $loop->index+1 }}</th>
+                        <th scope="row" class="text-center">{{ $loop->index+1 }}</th>
                         <td>{{ $staff->fullname }}</td>
                         <td>{{ $staff->email }}</td>
                         <td>{{ $staff->divisi->name }}</td>

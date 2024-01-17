@@ -24,12 +24,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        return view('dashboard');
 
-        if ($user->divisi->name != 'Manager') {
-            return redirect()->route('dashboard.staff');
-        } else {
-            return view('manager.dashboard');
-        }
+        // $user = Auth::user();
+
+        // if ($user->divisi->name != 'Manager') {
+        //     return redirect()->route('dashboard.staff');
+        // } else {
+        //     return view('manager.dashboard');
+        // }
     }
 }

@@ -47,9 +47,11 @@ class ActivityController extends Controller
     public function index()
     {
         $acts = Activity::all();
+        $actWIG = Activity::where('status', $this->wig)->get();
+        $actIG = Activity::where('status', $this->ig)->get();
         $WIGWeight = Activity::where('status', $this->wig)->sum('weight');
         $IGWeight = Activity::where('status', $this->ig)->sum('weight');
-        return view('activity.index', compact('acts', 'WIGWeight', 'IGWeight'));
+        return view('activity.index', compact('acts', 'actWIG', 'actIG', 'WIGWeight', 'IGWeight'));
     }
 
     /**

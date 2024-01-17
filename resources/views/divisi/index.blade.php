@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="card">
+    <div class="card border">
         <div class="card-body">
             <a href="{{ route('div.create') }}" class="btn btn-outline-secondary my-1"><i
                     class="ti ti-plus pe-2"></i>Add New</a>
             <h5 class="card-title fw-semibold my-4">Divisi List</h5>
-            <table class="table table-sm table-bordered">
+            <table class="table table-sm table-bordered table-hover">
                 <thead>
                     <tr>
                         <th scope="col" width="30">No</th>
@@ -24,7 +24,7 @@
                     @endif
                     @foreach ($divisis as $div)
                     <tr>
-                        <th scope="row">{{ $loop->index+1 }}</th>
+                        <th scope="row" class="text-center">{{ $loop->index+1 }}</th>
                         <td>{{ $div->name }}</td>
                         <td class="text-center">
                             <a href="{{ route('div.edit', ['id' => $div->id ]) }}"

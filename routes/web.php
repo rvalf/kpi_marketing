@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\InitiativeController;
+use App\Http\Controllers\PerformanceReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +24,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/home-staff', [App\Http\Controllers\DashboardController::class, 'staff'])->name('dashboard.staff');
-
 // User
 Route::get('staff/index', [UserController::class, 'index'])->name('staff.index');
 Route::get('staff/add', [UserController::class, 'create'])->name('staff.create');
@@ -43,18 +41,28 @@ Route::post('divisi/store', [DivisiController::class, 'store'])->name('div.store
 Route::put('divisi/update/{id}', [DivisiController::class, 'update'])->name('div.update');
 Route::delete('divisi/delete/{id}', [DivisiController::class, 'destroy'])->name('div.delete');
 
-// Activity
-Route::get('activity/index', [ActivityController::class, 'index'])->name('act.index');
-Route::get('activity/add', [ActivityController::class, 'create'])->name('act.create');
-Route::get('activity/edit/{id}', [ActivityController::class, 'edit'])->name('act.edit');
-Route::post('activity/store', [ActivityController::class, 'store'])->name('act.store');
-Route::put('activity/update/{id}', [ActivityController::class, 'update'])->name('act.update');
-Route::delete('activity/delete/{id}', [ActivityController::class, 'destroy'])->name('act.delete');
+Route::middleware(['checkDivisi'])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    // Route::get('/home-staff', [App\Http\Controllers\DashboardController::class, 'staff'])->name('dashboard.staff');
 
-// Initiative
-Route::get('initiative/index', [InitiativeController::class, 'index'])->name('init.index');
-Route::get('initiative/add', [InitiativeController::class, 'create'])->name('init.create');
-Route::get('initiative/edit/{id}', [InitiativeController::class, 'edit'])->name('init.edit');
-Route::post('initiative/store', [InitiativeController::class, 'store'])->name('init.store');
-Route::put('initiative/update/{id}', [InitiativeController::class, 'update'])->name('init.update');
-Route::delete('initiative/delete/{id}', [InitiativeController::class, 'destroy'])->name('init.delete');
+    // Activity
+    Route::get('activity/index', [ActivityController::class, 'index'])->name('act.index');
+    Route::get('activity/add', [ActivityController::class, 'create'])->name('act.create');
+    Route::get('activity/edit/{id}', [ActivityController::class, 'edit'])->name('act.edit');
+    Route::post('activity/store', [ActivityController::class, 'store'])->name('act.store');
+    Route::put('activity/update/{id}', [ActivityController::class, 'update'])->name('act.update');
+    Route::delete('activity/delete/{id}', [ActivityController::class, 'destroy'])->name('act.delete');
+    
+    // Initiative
+    Route::get('initiative/index', [InitiativeController::class, 'index'])->name('init.index');
+    Route::get('initiative/add/{act_id}', [InitiativeController::class, 'create'])->name('init.create');
+    Route::get('initiative/edit/{id}', [InitiativeController::class, 'edit'])->name('init.edit');
+    Route::post('initiative/store', [InitiativeController::class, 'store'])->name('init.store');
+    Route::put('initiative/update/{id}', [InitiativeController::class, 'update'])->name('init.update');
+    Route::delete('initiative/delete/{id}', [InitiativeController::class, 'destroy'])->name('init.delete');
+});
+
+// Performance Report
+Route::get('report/index', [PerformanceReportController::class, 'index'])->name('report.index');
+Route::get('report/add/{init_id}', [PerformanceReportController::class, 'create'])->name('report.create');
+Route::post('report/store', [PerformanceReportController::class, 'store'])->name('report.store');

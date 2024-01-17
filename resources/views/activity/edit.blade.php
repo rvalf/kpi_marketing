@@ -114,7 +114,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <p class="fw-semibold my-2 p-1 px-2 bg-secondary rounded-2 text-white" style="width: fit-content;">
+                    <p class="fw-semibold my-2 p-1 px-2 bg-warning rounded-2 text-white" style="width: fit-content;">
                         Important Goal (IG)</p>
                     <table class="table">
                         <thead>

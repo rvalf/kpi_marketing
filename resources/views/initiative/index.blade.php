@@ -1,115 +1,256 @@
-@extends('layouts.manager')
+@extends($layout)
 
 @section('content')
 <div class="container-fluid">
-    <div class="card">
+    <div class="card border">
         <div class="card-body">
-            <!-- <a href="{{ route('init.create') }}" class="btn btn-outline-secondary my-1"><i
-                    class="ti ti-plus pe-2"></i>Add New</a> -->
-            <h5 class="card-title fw-semibold my-4">Initiative</h5>
-            <table class="table table-sm table-striped tabble-bordered" id="table-body">
-                <thead>
-                    <tr>
-                        <th scope="col" width="30">NO</th>
-                        <th scope="col" class="text-center">OBJECTIVE</th>
-                        <th scope="col" class="text-center">WEIGHT</th>
-                        <th scope="col" class="text-center">TARGET</th>
-                        <th scope="col" class="text-center">DETAIL</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    @foreach ($acts as $act)
-                    <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
-                        <td>{{ $act->objective }}</td>
-                        <td class="text-end">{{ $act->weight }} %</td>
-                        @if ($act->target_type === 'Precentage')
-                        <td class="text-end">{{ $act->target }}%</td>
-                        @elseif ($act->target_type === 'Rupiah')
-                        <td class="text-end">Rp. {{ $act->target }}</td>
+            @if (Auth::user()->divisi_id === 1)
+            <p class="badge bg-primary mb-2 rounded-3 mb-3" style="font-size: 12px">Wildly Important Goal <span
+                    class="badge bg-light text-dark p-1 ms-2 rounded-3" style="font-size: 11px">
+                    {{ $WIGWeight }}%</span></p>
+            @foreach ($actWIG as $act)
+            <div class="card border-grey shadow mb-3">
+                <div class="card-body py-3 px-4">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <p class="sub-title">Objective</p>
+                            <p class="m-0 fw-bolder">{{ $act->objective }}</p>
+                        </div>
+                        <div class="col-sm-1">
+                            <p class="sub-title">Weight</p>
+                            <p class="m-0">{{ $act->weight }} %</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p class="sub-title text-center">Progress</p>
+                            <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25"
+                                aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-success" style="width: 50%">50%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <a href="{{ route('init.create', ['act_id' => $act->id]) }}"
+                                class="btn btn-outline-secondary my-1"><i class="ti ti-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="target mt-2">
+                        @if ($act->target_type == 'Rupiah')
+                        <p class="m-0" style="font-size: 11px;">Target : Rp.
+                            {{ number_format($act->target, 0, ',', '.') }}</p>
+                        @elseif ($act->target_type == 'Precentage')
+                        <p class="m-0" style="font-size: 11px;">Target : {{ $act->target }} %</p>
                         @else
-                        <td class="text-end">{{ $act->target }}</td>
+                        <p class="m-0" style="font-size: 11px;">Target : {{ $act->target }}</p>
                         @endif
-                        <td class="text-center">
-                            <a class="btn btn-sm btn-primary show-initiative" href="#"><i class="ti ti-eye"></i>
-                                Initiative</a>
-                        </td>
-                    </tr>
-                    <tr style="display: none;">
-                        <td></td>
-                        <td colspan="4">
-                            <table class="table table-bordered border-dark table-sm">
+                    </div>
+                    <div class="details mt-3" style="display: block;">
+                        <div class="initiative ps-4">
+                            <table class="table table-sm table-detail">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="text-center">INITIATIVE</th>
-                                        <th scope="col" class="text-center">WEIGHT</th>
-                                        <th scope="col" class="text-center">TARGET</th>
+                                        <th scope="col" style="width: 25px;"></th>
+                                        <th scope="col">Initiative</th>
+                                        <th scope="col">Weight</th>
+                                        <th scope="col">Target</th>
+                                        <th scope="col">PIC</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($act->initiatives as $init)
                                     <tr>
-                                        <td>Proposal</td>
-                                        <td>20 %</td>
-                                        <td>100 %</td>
+                                        <td scope="row" class="text-end">{{ $loop->iteration }} .</td>
+                                        <td>{{ $init->initiative }}</td>
+                                        <td>{{ $init->weight }} %</td>
+                                        <td>{{ $init->target }} %</td>
+                                        <td>{{ $init->user->fullname }}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-secondary"
+                                                href="{{ route('init.edit', ['id' => $init->id]) }}"><i
+                                                    class="ti ti-edit"></i></a>
+                                        </td>
+                                        <td>
+                                            <form action="{{ route('init.delete', ['id' => $init->id]) }}" method="POST"
+                                                style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    onclick="return confirm('Are you sure want to delete this?');">
+                                                    <i class="ti ti-trash-x"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
+            <p class="badge bg-warning mb-2 rounded-3 mb-3" style="font-size: 12px">Important Goal <span
+                    class="badge bg-light text-dark p-1 ms-2 rounded-3" style="font-size: 11px"> {{ $IGWeight }}%</span>
+            </p>
+            @foreach ($actIG as $act)
+            <div class="card border-grey shadow mb-3">
+                <div class="card-body py-3 px-4">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <p class="sub-title">Objective</p>
+                            <p class="m-0 fw-bolder">{{ $act->objective }}</p>
+                        </div>
+                        <div class="col-sm-1">
+                            <p class="sub-title">Weight</p>
+                            <p class="m-0">{{ $act->weight }} %</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p class="sub-title text-center">Progress</p>
+                            <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25"
+                                aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-success" style="width: 50%">50%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <a href="{{ route('init.create', ['act_id' => $act->id]) }}"
+                                class="btn btn-outline-secondary my-1"><i class="ti ti-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="target mt-2">
+                        @if ($act->target_type == 'Rupiah')
+                        <p class="m-0" style="font-size: 11px;">Target : Rp.
+                            {{ number_format($act->target, 0, ',', '.') }}</p>
+                        @elseif ($act->target_type == 'Precentage')
+                        <p class="m-0" style="font-size: 11px;">Target : {{ $act->target }} %</p>
+                        @else
+                        <p class="m-0" style="font-size: 11px;">Target : {{ $act->target }}</p>
+                        @endif
+                    </div>
+                    <div class="details mt-3" style="display: block;">
+                        <div class="initiative ps-4">
+                            <table class="table table-sm table-detail">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 25px;"></th>
+                                        <th scope="col">Initiative</th>
+                                        <th scope="col">Weight</th>
+                                        <th scope="col">Target</th>
+                                        <th scope="col">PIC</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($act->initiatives as $init)
+                                    <tr>
+                                        <td scope="row" class="text-end">{{ $loop->iteration }} .</td>
+                                        <td>{{ $init->initiative }}</td>
+                                        <td>{{ $init->weight }} %</td>
+                                        <td>{{ $init->target }} %</td>
+                                        <td>{{ $init->user->fullname }}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-secondary"
+                                                href="{{ route('init.edit', ['id' => $init->id]) }}"><i
+                                                    class="ti ti-edit"></i></a>
+                                        </td>
+                                        <td>
+                                            <form action="{{ route('init.delete', ['id' => $init->id]) }}" method="POST"
+                                                style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    onclick="return confirm('Are you sure want to delete this?');">
+                                                    <i class="ti ti-trash-x"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
+            <!-- ISI HALAMAN STAFF -->
+
+            @else
+            <p class="badge bg-primary mb-2 rounded-3 mb-3" style="font-size: 12px">Wildly Important Goal</p>
+            @foreach ($actWIG as $act)
+            @if ($act->initiatives->contains('user_id', Auth::user()->id))
+            <div class="card border-grey shadow mb-3">
+                <div class="card-body py-3 px-4">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <p class="sub-title">Objective</p>
+                            <p class="m-0 fw-bolder">{{ $act->objective }}</p>
+                        </div>
+                        <div class="col-sm-1">
+                            <p class="sub-title">Weight</p>
+                            <p class="m-0">{{ $act->weight }} %</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p class="sub-title text-center">Progress</p>
+                            <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25"
+                                aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-success" style="width: 50%">50%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="target mt-2">
+                        @if ($act->target_type == 'Rupiah')
+                        <p class="m-0" style="font-size: 11px;">Target : Rp.
+                            {{ number_format($act->target, 0, ',', '.') }}</p>
+                        @elseif ($act->target_type == 'Precentage')
+                        <p class="m-0" style="font-size: 11px;">Target : {{ $act->target }} %</p>
+                        @else
+                        <p class="m-0" style="font-size: 11px;">Target : {{ $act->target }}</p>
+                        @endif
+                    </div>
+                    <div class="details mt-3" style="display: block;">
+                        <div class="initiative ps-4">
+                            <table class="table table-sm table-detail">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 25px;"></th>
+                                        <th scope="col">Initiative</th>
+                                        <th scope="col">Weight</th>
+                                        <th scope="col">Target</th>
+                                        <th scope="col">PIC</th>
+                                        <th scope="col" class="text-center">Report</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($act->initiatives as $init)
+                                    @if ($init->user->id === Auth::user()->id)
+                                    <tr>
+                                        <td scope="row" class="text-end">{{ $loop->iteration }} .</td>
+                                        <td>{{ $init->initiative }}</td>
+                                        <td>{{ $init->weight }} %</td>
+                                        <td>{{ $init->target }} %</td>
+                                        <td>{{ $init->user->fullname }}</td>
+                                        <td class="text-center">
+                                            <a href="" class="btn btn-sm btn-secondary"><i class="ti ti-pencil"></i></a>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @endforeach
+            @endif
         </div>
     </div>
 </div>
 @endsection
-<!-- 
-@if($inits->isEmpty())
-<tr>
-    <td colspan="4">Data is empty! Click Add New to fill this section.</td>
-</tr>
-@else
-@foreach ($inits as $init)
-<tr>
-    <th scope="row">{{ $loop->iteration }}</th>
-    <td>{{ $init->initiative }}</td>
-    <td class="text-end">{{ $init->weight }} %</td>
-    @if ($init->target_type === 'Precentage')
-    <td class="text-end">{{ $init->target }}%</td>
-    @elseif ($init->target_type === 'Rupiah')
-    <td class="text-end">Rp. {{ $init->target }}</td>
-    @else
-    <td class="text-end">{{ $init->target }}</td>
-    @endif
-    <td>
-        <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0"
-            aria-valuemax="100">
-            <div class="progress-bar bg-success" style="width: 50%">50%
-            </div>
-        </div>
-    </td>
-    <td class="text-center">
-        <div class="dropdown">
-            <button class="btn p-0 px-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item text-primary" href="{{ route('init.edit', ['id' => $init->id]) }}"><i
-                            class="ti ti-edit"></i>
-                        Edit</a></li>
-                <li>
-                    <form action="{{ route('init.delete', ['id' => $init->id]) }}" method="POST"
-                        style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="dropdown-item text-danger"
-                            onclick="return confirm('Are you sure want to delete this?');">
-                            <i class="ti ti-trash-x"></i> Delete
-                        </button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </td>
-</tr>
-@endforeach
-@endif -->

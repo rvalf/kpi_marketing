@@ -17,9 +17,46 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JavaScript (Popper.js is required) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Templates -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/logo_astra_square.png') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/styles.min.css') }}" />
+
+    <style>
+    .table .bg-success th,
+    .table .bg-success td {
+        color: white;
+    }
+
+    .border-grey {
+        border: solid 1px #e3e3e3;
+    }
+
+    p.sub-title {
+        font-size: 10px;
+        margin-bottom: 2px;
+        text-decoration: underline;
+    }
+
+    .table-detail th,
+    .table-detail td {
+        font-size: 13px;
+    }
+
+    .table-detail th {
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+
+    .dropdown button::after {
+        content: none;
+    }
+    </style>
 </head>
 
 <body>
@@ -48,7 +85,7 @@
                                 <span class="hide-menu">Home</span>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./index.html" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('home') }}" aria-expanded="false">
                                     <span>
                                         <i class="ti ti-activity"></i>
                                     </span>
@@ -60,19 +97,27 @@
                                 <span class="hide-menu">ACTIVITY</span>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('report.index') }}" aria-expanded="false">
                                     <span>
-                                        <i class="ti ti-list-details"></i>
+                                        <i class="ti ti-subtask"></i>
                                     </span>
-                                    <span class="hide-menu">Activity Plan</span>
+                                    <span class="hide-menu">Performance Report</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('init.index') }}" aria-expanded="false">
                                     <span>
                                         <i class="ti ti-subtask"></i>
                                     </span>
                                     <span class="hide-menu">Initiatives</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('act.index') }}" aria-expanded="false">
+                                    <span>
+                                        <i class="ti ti-list-details"></i>
+                                    </span>
+                                    <span class="hide-menu">Activity Plan</span>
                                 </a>
                             </li>
                             <li class="nav-small-cap">
@@ -143,6 +188,36 @@
         <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
         <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
         <script src="../assets/js/dashboard.js"></script>
+
+        <script>
+        $(document).ready(function() {
+            // $('.show-initiative').click(function(e) {
+            //     e.preventDefault();
+            //     $(this).closest('tr').next('tr').toggle();
+            // });
+
+            $('.show-detail').on('click', function(e) {
+                e.preventDefault();
+                var parentCard = $(this).closest('.card-body');
+                parentCard.find('.details').slideToggle();
+                return false;
+            });
+        });
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     var tableBody = document.getElementById('table-body');
+        //     var rowNumber = 1;
+
+        //     // Loop melalui setiap baris tabel
+        //     for (var i = 0; i < tableBody.rows.length; i++) {
+        //         var currentRow = tableBody.rows[i];
+
+        //         // Jika baris memiliki elemen dengan th scope="row", set nomornya
+        //         if (currentRow.querySelector('th[scope="row"]')) {
+        //             currentRow.querySelector('th[scope="row"]').textContent = rowNumber++;
+        //         }
+        //     }
+        // });
+        </script>
     </body>
 </body>
 
