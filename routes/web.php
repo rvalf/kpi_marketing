@@ -66,3 +66,4 @@ Route::middleware(['checkDivisi'])->group(function () {
 Route::get('report/index', [PerformanceReportController::class, 'index'])->name('report.index');
 Route::get('report/add/{init_id}', [PerformanceReportController::class, 'create'])->name('report.create');
 Route::post('report/store', [PerformanceReportController::class, 'store'])->name('report.store');
+Route::get('/chart-data', [PerformanceReportController::class, 'getData']);

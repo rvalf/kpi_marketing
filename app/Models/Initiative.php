@@ -17,5 +17,9 @@ class Initiative extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
-    }    
+    }   
+    
+    public function reports() {
+        return $this->hasMany(PerformanceReport::class);
+    }
 }

@@ -57,6 +57,21 @@ class InitiativeController extends Controller
                 'target' => 'required',
                 'user_id' => 'required',
             ]);
+
+            $actId = $validatedData['activity_id'];
+            $initAll = Initiative::all();
+            $currentWeight = 0;
+            foreach ($initAll as $init) {
+                if ($init->activity->id == $actId) {
+                    $currentWeight += $init->weight;
+                }
+            }
+            
+            $maxWeight = 100 - $currentWeight;
+            $validatedWeight = intval($validatedData['weight']);
+            if ($validatedWeight > $maxWeight) {
+                return redirect(route('init.create', ['act_id' => $actId]))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
+            }
     
             Initiative::create($validatedData);
     
@@ -108,6 +123,21 @@ class InitiativeController extends Controller
             'target' => 'required',
             'user_id' => 'required',
         ]);
+        
+        $actId = $init->activity->id;
+        $initAll = Initiative::where('id', '!=', $id)->get();
+        $currentWeight = 0;
+        foreach ($initAll as $init) {
+            if ($init->activity->id == $actId) {
+                $currentWeight += $init->weight;
+            }
+        }
+        
+        $maxWeight = 100 - $currentWeight;
+        $validatedWeight = intval($validatedData['weight']);
+        if ($validatedWeight > $maxWeight) {
+            return redirect(route('init.edit', ['id' => $id]))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
+        }
 
         if ($init->update($validatedData)) {
             return redirect(route('init.index'))->with('success', 'Updated Successfully');

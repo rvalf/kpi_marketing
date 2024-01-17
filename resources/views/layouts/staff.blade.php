@@ -56,6 +56,10 @@
     .dropdown button::after {
         content: none;
     }
+
+    .font-11 .col {
+        font-size: 11px;
+    }
     </style>
 </head>
 
@@ -99,7 +103,7 @@
                             <li class="sidebar-item">
                                 <a class="sidebar-link" href="{{ route('report.index') }}" aria-expanded="false">
                                     <span>
-                                        <i class="ti ti-subtask"></i>
+                                        <i class="ti ti-clipboard-text"></i>
                                     </span>
                                     <span class="hide-menu">Performance Report</span>
                                 </a>
@@ -177,17 +181,17 @@
                 </header>
                 <!--  Header End -->
 
-                
                 @yield('content')
+
             </div>
         </div>
-        <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-        <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../assets/js/sidebarmenu.js"></script>
-        <script src="../assets/js/app.min.js"></script>
-        <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-        <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
-        <script src="../assets/js/dashboard.js"></script>
+        <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('assets/js/sidebarmenu.js') }}"></script>
+        <script src="{{ asset('assets/js/app.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/simplebar/dist/simplebar.js') }}"></script>
+        <script src="{{ asset('assets/js/dashboard.js') }}"></script>
 
         <script>
         $(document).ready(function() {
