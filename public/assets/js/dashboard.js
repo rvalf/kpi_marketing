@@ -13,7 +13,7 @@ $(function () {
 
                   chart: {
                       type: "bar",
-                      height: 345,
+                      height: 245,
                       offsetX: -15,
                       toolbar: { show: true },
                       foreColor: "#adb0bb",
@@ -55,7 +55,7 @@ $(function () {
 
                   xaxis: {
                       type: "category",
-                      categories: ["16/08", "17/08", "18/08", "19/08", "20/08", "21/08", "22/08", "23/08"],
+                      categories: serverData[i].monthxaxis,
                       labels: {
                           style: { cssClass: "grey--text lighten-2--text fill-color" },
                       },
@@ -64,8 +64,8 @@ $(function () {
                   yaxis: {
                       show: true,
                       min: 0,
-                      max: 400,
-                      tickAmount: 4,
+                      max: 100,
+                      tickAmount: 5,
                       labels: {
                           style: {
                               cssClass: "grey--text lighten-2--text fill-color",

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Initiative;
+use App\Models\PerformanceReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,21 +23,47 @@ class PerformanceReportController extends Controller
 
     public function getData()
     {
-        $serverData =[
-            [
+        $user = Auth::user();
+        $inits = Initiative::where('user_id', $user->id)->get();
+
+        
+        foreach ($inits as $init) {
+            $reports = $init->reports->toArray();
+            
+            $planningSeries = [];
+            $actualSeries = [];
+            $monthxaxis = [];
+
+            foreach ($reports as $report) {
+                $planningSeries[] = $report['plan'];
+                $actualSeries[] = $report['actual'];
+                $monthxaxis[] = $report['month'];
+            }
+
+            $serverData[] = [
                 'series' => [
-                    ['name' => 'Earnings this month:', 'data' => [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]],
-                    ['name' => 'Expense this month:', 'data' => [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]],
+                    ['name' => 'Planning', 'data' => $planningSeries],
+                    ['name' => 'Actual', 'data' => $actualSeries],
                 ],
-            ],
-            [
-                'series' => [
-                    ['name' => 'Earnings this month:', 'data' => [100, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]],
-                    ['name' => 'Expense this month:', 'data' => [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]],
-                ],
-            ],
-        ];
-        // dd($data);
+                'monthxaxis' => $monthxaxis,
+            ];
+        }
+        
+        // $serverData =[
+        //     [
+        //         'series' => [
+        //             ['name' => 'Earnings this month:', 'data' => [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]],
+        //             ['name' => 'Expense this month:', 'data' => [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]],
+        //         ],
+        //     ],
+        //     [
+        //         'series' => [
+        //             ['name' => 'Earnings this month:', 'data' => [100, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]],
+        //             ['name' => 'Expense this month:', 'data' => [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]],
+        //         ],
+        //     ],
+        // ];
+        
         return response()->json($serverData);
     }
 

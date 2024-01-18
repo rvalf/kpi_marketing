@@ -206,6 +206,20 @@
                 parentCard.find('.details').slideToggle();
                 return false;
             });
+
+            var hasilPresentaseElements = document.querySelectorAll('.hasil-presentase');
+
+            // Loop melalui setiap elemen hasil-presentase dan hitung serta set nilai persentase pencapaian
+            hasilPresentaseElements.forEach(function(element, index) {
+                var planning = parseFloat(document.querySelectorAll('.planning')[index].textContent);
+                var actual = parseFloat(document.querySelectorAll('.aktual')[index].textContent);
+                    
+                // Menghitung persentase pencapaian dan membulatkannya ke bilangan bulat
+                var hasilPencapaian = Math.round((actual / planning) * 100);
+                    
+                // Menampilkan hasil di dalam elemen hasil-presentase
+                element.textContent = hasilPencapaian + ' %';
+            });
         });
         // document.addEventListener('DOMContentLoaded', function() {
         //     var tableBody = document.getElementById('table-body');

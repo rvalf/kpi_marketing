@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('performance_reports', function (Blueprint $table) {
             $table->id();
             $table->string('month');
-            $table->string('progres');
-            $table->string('evidence_file');
+            $table->integer('plan');
+            $table->integer('actual');
+            $table->string('evidence_file')->nullable();
             $table->string('result_desc');
             $table->string('problem_identification')->nullable();
             $table->string('corrective_ation')->nullable();
