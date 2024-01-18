@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('evidence_file')->nullable();
             $table->string('result_desc');
             $table->string('problem_identification')->nullable();
-            $table->string('corrective_ation')->nullable();
+            $table->string('corrective_action')->nullable();
 
             $table->foreignId('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');

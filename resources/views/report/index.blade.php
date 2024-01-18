@@ -113,6 +113,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <input type="hidden" name="initiative_id" value="{{ $init->id }}">
+                                        <input type="hidden" name="last_month"
+                                            value="{{ optional($init->reports->last())->month }}">
                                         <div class="mb-2">
                                             <label for="month" class="form-label">Month<span
                                                     style="color: red;">*</span></label>

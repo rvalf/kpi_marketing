@@ -213,10 +213,10 @@
             hasilPresentaseElements.forEach(function(element, index) {
                 var planning = parseFloat(document.querySelectorAll('.planning')[index].textContent);
                 var actual = parseFloat(document.querySelectorAll('.aktual')[index].textContent);
-                    
+
                 // Menghitung persentase pencapaian dan membulatkannya ke bilangan bulat
                 var hasilPencapaian = Math.round((actual / planning) * 100);
-                    
+
                 // Menampilkan hasil di dalam elemen hasil-presentase
                 element.textContent = hasilPencapaian + ' %';
             });
