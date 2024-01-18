@@ -85,7 +85,31 @@ class PerformanceReportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        try {
+            $validatedData = $request->validate([
+                'initiative_id' => 'required',
+                'month' => 'required',
+                'plan' => 'required|numeric',
+                'actual' => 'required|numeric',
+                'result_desc' => 'required',
+                'problem_identification' => 'nullable',
+                'corrective_action' => 'nullable',
+            ]);
+            $validatedData['user_id'] = $user->id;
+
+            $reports = PerformanceReport::where('initiative_id', $validatedData['initiative_id'])->get();
+            if ($reports->contains('month', $validatedData['month'])) {
+                return redirect(route('report.index'))->withErrors(['error' => 'You have been reported this month!']);
+            }
+
+            PerformanceReport::create($validatedData);
+    
+            return redirect(route('report.index'))->with('success', 'Created Successfully');
+        }catch (\Exception $e) {
+            dd($e->getMessage());
+            return redirect()->back()->with('error', 'Failed to create: ' . $e->getMessage());
+        }  
     }
 
     /**

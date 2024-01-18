@@ -2,6 +2,15 @@
 
 @section('content')
 <div class="container-fluid">
+    @if($errors->any())
+    <div class="alert alert-danger mb-3">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     @foreach ($inits as $init)
     <div class="card border-grey shadow mb-3">
         <div class="card-body py-3 px-4">
@@ -13,7 +22,7 @@
                                 <p class="text-primary fw-bolder mb-1" style="font-size: 11px">
                                     {{ $init->activity->status }}
                                 </p>
-                                <p class="fw-bolder">{{ $init->activity->objective }}</p>
+                                <p class="fw-bolder" style="font-size: 18px">{{ $init->activity->objective }}</p>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -85,24 +94,28 @@
                     <div class="text-end">
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#assignModal">
+                            data-bs-target="#assignModal_{{ $init->id }}">
                             Create
                         </button>
                     </div>
                     <!-- Modal -->
-                    <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel"
-                        aria-hidden="true">
+                    <div class="modal fade" id="assignModal_{{ $init->id }}" tabindex="-1"
+                        aria-labelledby="assignModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="assignModalLabel">Assign Performance Report</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="">
+                                <form action="{{ route('report.store') }}" method="post">
+                                    @csrf
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="assignModalLabel">Assign Performance Report
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="initiative_id" value="{{ $init->id }}">
                                         <div class="mb-2">
-                                            <label for="month" class="form-label">Month<span style="color: red;">*</span></label>
+                                            <label for="month" class="form-label">Month<span
+                                                    style="color: red;">*</span></label>
                                             <select class="form-select" aria-label="Default select example" id="month"
                                                 name="month">
                                                 <option selected>Select Month</option>
@@ -121,43 +134,50 @@
                                             </select>
                                         </div>
                                         <div class="mb-2">
-                                            <label for="plan" class="form-label">Planning<span style="color: red;">*</span></label>
+                                            <label for="plan" class="form-label">Planning<span
+                                                    style="color: red;">*</span></label>
                                             <input type="number" class="form-control" id="plan" name="plan"
                                                 aria-describedby="inputExplain" required>
                                             <div id="inputExplain" class="form-text">Number input only, example: 20.
                                             </div>
                                         </div>
                                         <div class="mb-2">
-                                            <label for="aktual" class="form-label">Actual Progress<span style="color: red;">*</span></label>
-                                            <input type="number" class="form-control" id="aktual" name="aktual"
+                                            <label for="actual" class="form-label">Actual Progress<span
+                                                    style="color: red;">*</span></label>
+                                            <input type="number" class="form-control" id="actual" name="actual"
                                                 aria-describedby="inputExplain" required>
                                             <div id="inputExplain" class="form-text">Number input only, example: 20.
                                             </div>
                                         </div>
                                         <div class="mb-2">
-                                            <label for="result_desc" class="form-label">Result Description<span style="color: red;">*</span></label>
+                                            <label for="result_desc" class="form-label">Result Description<span
+                                                    style="color: red;">*</span></label>
                                             <textarea class="form-control" id="result_desc" name="result_desc"
                                                 aria-describedby="textareaExplain" required></textarea>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="w-50 pe-1">
-                                                <label for="problem_identification" class="form-label">Problem Identification</label>
-                                                <textarea class="form-control" id="problem_identification" name="problem_identification"
-                                                    aria-describedby="textareaExplain" required></textarea>
+                                                <label for="problem_identification" class="form-label">Problem
+                                                    Identification</label>
+                                                <textarea class="form-control" id="problem_identification"
+                                                    name="problem_identification"
+                                                    aria-describedby="textareaExplain"></textarea>
                                             </div>
                                             <div class="w-50 ps-1">
-                                                <label for="corrective_action" class="form-label">Corrective Action</label>
-                                                <textarea class="form-control" id="corrective_action" name="corrective_action"
-                                                    aria-describedby="textareaExplain" required></textarea>
+                                                <label for="corrective_action" class="form-label">Corrective
+                                                    Action</label>
+                                                <textarea class="form-control" id="corrective_action"
+                                                    name="corrective_action"
+                                                    aria-describedby="textareaExplain"></textarea>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Submit</button>
-                                </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

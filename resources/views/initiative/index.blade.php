@@ -222,6 +222,7 @@
                                         <th scope="col">Initiative</th>
                                         <th scope="col">Weight</th>
                                         <th scope="col">Target</th>
+                                        <th scope="col">Progres</th>
                                         <th scope="col">PIC</th>
                                         <th scope="col" class="text-center">Report</th>
                                     </tr>
@@ -234,6 +235,13 @@
                                         <td>{{ $init->initiative }}</td>
                                         <td>{{ $init->weight }} %</td>
                                         <td>{{ $init->target }} %</td>
+                                        <td>
+                                            <div class="progress" role="progressbar" aria-label="Success example"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar bg-success" style="width: {{}}">50%
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>{{ $init->user->fullname }}</td>
                                         <td class="text-center">
                                             <a href="" class="btn btn-sm btn-secondary"><i class="ti ti-pencil"></i></a>
