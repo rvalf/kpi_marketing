@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\InitiativeController;
 use App\Http\Controllers\PerformanceReportController;
@@ -19,7 +20,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect('/home');
+    }
+    return redirect('/login');
 });
 
 Auth::routes();
@@ -33,6 +37,9 @@ Route::post('staff/store', [UserController::class, 'store'])->name('staff.store'
 Route::put('staff/update/{id}', [UserController::class, 'update'])->name('staff.update');
 Route::delete('staff/delete/{id}', [UserController::class, 'destroy'])->name('staff.delete');
 
+Route::get('staff/show-profile', [UserController::class, 'showProfile'])->name('staff.showprofile');
+
+
 // Divisi
 Route::get('divisi/index', [DivisiController::class, 'index'])->name('div.index');
 Route::get('divisi/add', [DivisiController::class, 'create'])->name('div.create');
@@ -42,8 +49,7 @@ Route::put('divisi/update/{id}', [DivisiController::class, 'update'])->name('div
 Route::delete('divisi/delete/{id}', [DivisiController::class, 'destroy'])->name('div.delete');
 
 Route::middleware(['checkDivisi'])->group(function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    // Route::get('/home-staff', [App\Http\Controllers\DashboardController::class, 'staff'])->name('dashboard.staff');
+    Route::get('/home', [App\Http\Controllers\DashboardController::class, 'index'])->name('home');
 
     // Activity
     Route::get('activity/index', [ActivityController::class, 'index'])->name('act.index');
@@ -65,5 +71,22 @@ Route::middleware(['checkDivisi'])->group(function () {
 // Performance Report
 Route::get('report/index', [PerformanceReportController::class, 'index'])->name('report.index');
 Route::get('report/add/{init_id}', [PerformanceReportController::class, 'create'])->name('report.create');
-Route::post('report/store/', [PerformanceReportController::class, 'store'])->name('report.store');
+Route::post('report/store/{initiative_id}', [PerformanceReportController::class, 'store'])->name('report.store');
+Route::delete('report/delete/{id}', [PerformanceReportController::class, 'destroy'])->name('report.destroy');
+Route::post('/upload/{id}', [PerformanceReportController::class, 'uploadFile'])->name('report.upload');
+Route::get('/download/{file}', [PerformanceReportController::class, 'downloadFile'])->name('report.download');
+
+Route::get('/scoreboard-detail/{id}', [DashboardController::class, 'detailReportActivity'])->name('dashboard.detail');
+
+// ajax chart
 Route::get('/chart-data', [PerformanceReportController::class, 'getData']);
+Route::get('/chart-dashboard-detail/{activity_id}', [PerformanceReportController::class, 'getReportByActivity']);
+Route::get('/chart-activity-wig', [PerformanceReportController::class, 'getDataWIG']);
+Route::get('/chart-activity-ig', [PerformanceReportController::class, 'getDataIG']);
+
+Route::get('/export-pdf', [DashboardController::class, 'exportPdf']);
+
+// Perhitungan bobot
+Route::get('/progres-data/{activity_id}', [InitiativeController::class, 'getProgres']);
+Route::get('/my-task-data', [DashboardController::class, 'countMyTask']);
+Route::get('/getdata', [DashboardController::class, 'getDataPerhitungan']);

@@ -4,6 +4,17 @@
 <div class="container-fluid">
     <div class="card border">
         <div class="card-body">
+            @if(session('error'))
+            <div class="alert alert-danger mb-3">
+                {{ session('error') }}
+            </div>
+            @endif
+
+            @if(session('success'))
+            <div class="alert alert-success mb-3">
+                {{ session('success') }}
+            </div>
+            @endif
             @if (Auth::user()->divisi_id === 1)
             <p class="badge bg-primary mb-2 rounded-3 mb-3" style="font-size: 12px">Wildly Important Goal <span
                     class="badge bg-light text-dark p-1 ms-2 rounded-3" style="font-size: 11px">
@@ -22,9 +33,10 @@
                         </div>
                         <div class="col-sm-3">
                             <p class="sub-title text-center">Progress</p>
-                            <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-success" style="width: 50%">50%
+                            <div class="progress" role="progressbar" aria-label="Success example"
+                                aria-valuenow="{{ $progresActWIG[$act->id] }}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-success" style="width: {{ $progresActWIG[$act->id] }}%">
+                                    {{ $progresActWIG[$act->id] }}%
                                 </div>
                             </div>
                         </div>
@@ -55,6 +67,7 @@
                                         <th scope="col">PIC</th>
                                         <th scope="col">Edit</th>
                                         <th scope="col">Delete</th>
+                                        <th scope="col">Progres</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -63,7 +76,13 @@
                                         <td scope="row" class="text-end">{{ $loop->iteration }} .</td>
                                         <td>{{ $init->initiative }}</td>
                                         <td>{{ $init->weight }} %</td>
+                                        @if ($init->target_type == 'Precentage')
                                         <td>{{ $init->target }} %</td>
+                                        @elseif ($init->target_type == 'Rupiah')
+                                        <td class="formattedValue">{{ $init->target }}</td>
+                                        @else
+                                        <td>{{ $init->target }}</td>
+                                        @endif
                                         <td>{{ $init->user->fullname }}</td>
                                         <td>
                                             <a class="btn btn-sm btn-outline-secondary"
@@ -80,6 +99,31 @@
                                                     <i class="ti ti-trash-x"></i>
                                                 </button>
                                             </form>
+                                        </td>
+                                        <td>
+                                            @if ($init->reports && $lastReport = $init->reports->last())
+                                                @if ($init->target_type != 'Precentage')
+                                                @php 
+                                                    $lastReportActual = $init->reports->last()->actual;
+                                                    $currentProgres = ($lastReportActual/$init->target) * 100;
+                                                    @endphp
+                                                    <div class="progress" role="progressbar" aria-label="Success example"
+                                                        aria-valuenow="{{ $currentProgres }}" aria-valuemin="0" aria-valuemax="100">
+                                                        <div class="progress-bar bg-success"
+                                                            style="width: {{ $currentProgres }}%">
+                                                            {{ $currentProgres }}%
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                <div class="progress" role="progressbar" aria-label="Success example"
+                                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-success"
+                                                        style="width: {{ $init->reports->last()->actual }}%">
+                                                        {{ $init->reports->last()->actual }}%
+                                                    </div>
+                                                </div>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -108,9 +152,10 @@
                         </div>
                         <div class="col-sm-3">
                             <p class="sub-title text-center">Progress</p>
-                            <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-success" style="width: 50%">50%
+                            <div class="progress" role="progressbar" aria-label="Success example"
+                                aria-valuenow="{{ $progresActIG[$act->id] }}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-success" style="width: {{ $progresActIG[$act->id] }}%">
+                                    {{ $progresActIG[$act->id] }}%
                                 </div>
                             </div>
                         </div>
@@ -141,6 +186,7 @@
                                         <th scope="col">PIC</th>
                                         <th scope="col">Edit</th>
                                         <th scope="col">Delete</th>
+                                        <th scope="col">Progres</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,7 +195,13 @@
                                         <td scope="row" class="text-end">{{ $loop->iteration }} .</td>
                                         <td>{{ $init->initiative }}</td>
                                         <td>{{ $init->weight }} %</td>
+                                        @if ($init->target_type == 'Precentage')
                                         <td>{{ $init->target }} %</td>
+                                        @elseif ($init->target_type == 'Rupiah')
+                                        <td class="formattedValue">{{ $init->target }}</td>
+                                        @else
+                                        <td>{{ $init->target }}</td>
+                                        @endif
                                         <td>{{ $init->user->fullname }}</td>
                                         <td>
                                             <a class="btn btn-sm btn-outline-secondary"
@@ -166,6 +218,31 @@
                                                     <i class="ti ti-trash-x"></i>
                                                 </button>
                                             </form>
+                                        </td>
+                                        <td>
+                                            @if ($init->reports && $lastReport = $init->reports->last())
+                                                @if ($init->target_type != 'Precentage')
+                                                @php 
+                                                    $lastReportActual = $init->reports->last()->actual;
+                                                    $currentProgres = ($lastReportActual/$init->target) * 100;
+                                                    @endphp
+                                                    <div class="progress" role="progressbar" aria-label="Success example"
+                                                        aria-valuenow="{{ $currentProgres }}" aria-valuemin="0" aria-valuemax="100">
+                                                        <div class="progress-bar bg-success"
+                                                            style="width: {{ $currentProgres }}%">
+                                                            {{ $currentProgres }}%
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                <div class="progress" role="progressbar" aria-label="Success example"
+                                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-success"
+                                                        style="width: {{ $init->reports->last()->actual }}%">
+                                                        {{ $init->reports->last()->actual }}%
+                                                    </div>
+                                                </div>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -196,9 +273,10 @@
                         </div>
                         <div class="col-sm-3">
                             <p class="sub-title text-center">Progress</p>
-                            <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-success" style="width: 50%">50%
+                            <div class="progress" role="progressbar" aria-label="Success example"
+                                aria-valuenow="{{ $progresActWIG[$act->id] }}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-success" style="width: {{ $progresActWIG[$act->id] }}%">
+                                    {{ $progresActWIG[$act->id] }}%
                                 </div>
                             </div>
                         </div>
@@ -234,17 +312,41 @@
                                         <td scope="row" class="text-end">{{ $loop->iteration }} .</td>
                                         <td>{{ $init->initiative }}</td>
                                         <td>{{ $init->weight }} %</td>
+                                        @if ($init->target_type == 'Precentage')
                                         <td>{{ $init->target }} %</td>
+                                        @elseif ($init->target_type == 'Rupiah')
+                                        <td class="formattedValue">{{ $init->target }}</td>
+                                        @else
+                                        <td>{{ $init->target }}</td>
+                                        @endif
                                         <td>
-                                            <div class="progress" role="progressbar" aria-label="Success example"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar bg-success" style="width: {{ $init->reports->last()->actual }}%">{{ $init->reports->last()->actual }}%
+                                            @if ($init->reports && $lastReport = $init->reports->last())
+                                                @if ($init->target_type != 'Precentage')
+                                                @php 
+                                                    $lastReportActual = $init->reports->last()->actual;
+                                                    $currentProgres = ($lastReportActual/$init->target) * 100;
+                                                    @endphp
+                                                    <div class="progress" role="progressbar" aria-label="Success example"
+                                                        aria-valuenow="{{ $currentProgres }}" aria-valuemin="0" aria-valuemax="100">
+                                                        <div class="progress-bar bg-success"
+                                                            style="width: {{ $currentProgres }}%">
+                                                            {{ $currentProgres }}%
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                <div class="progress" role="progressbar" aria-label="Success example"
+                                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-success"
+                                                        style="width: {{ $init->reports->last()->actual }}%">
+                                                        {{ $init->reports->last()->actual }}%
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                @endif
+                                            @endif
                                         </td>
                                         <td>{{ $init->user->fullname }}</td>
                                         <td class="text-center">
-                                            <a href="" class="btn btn-sm btn-secondary"><i class="ti ti-pencil"></i></a>
+                                            <a href="{{ route('report.index') }}" class="btn btn-sm btn-secondary"><i class="ti ti-pencil"></i></a>
                                         </td>
                                     </tr>
                                     @endif

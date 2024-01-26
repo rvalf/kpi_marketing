@@ -69,7 +69,8 @@
                             <label for="user" class="form-label">PIC (Person In Charge)</label>
                             <select id="user" class="form-select" name="user_id" required>
                                 @foreach ($users as $userId => $user)
-                                <option {{ $init->user_id == $userId ? 'selected' : '' }} value="{{ $userId }}"> {{ $user }}</option>
+                                <option {{ $init->user_id == $userId ? 'selected' : '' }} value="{{ $userId }}">
+                                    {{ $user }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -80,7 +81,32 @@
                     </form>
                 </div>
                 <div class="col-sm-5 ps-4 border-start border-3">
-
+                    <div class="border rounded-2 border-1 p-2 mb-3">
+                        <p class="fw-bolder mb-1">{{ $init->activity->objective }}</p>
+                    </div>
+                    <table class="table table-sm table-detail">
+                        <thead>
+                            <tr>
+                                <th scope="col">Initiative</th>
+                                <th scope="col">Weight</th>
+                                <th scope="col">Target</th>
+                                <th scope="col">PIC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php 
+                                $act = $init->activity;
+                            @endphp
+                            @foreach ($act->initiatives as $in)
+                            <tr class="{{ $in->id === $init->id ? 'bg-success wig' : '' }}">
+                                <td>{{ $in->initiative }}</td>
+                                <td>{{ $in->weight }} %</td>
+                                <td>{{ $in->target }} %</td>
+                                <td>{{ $in->user->fullname }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

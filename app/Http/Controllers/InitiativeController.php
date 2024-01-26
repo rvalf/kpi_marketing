@@ -20,12 +20,48 @@ class InitiativeController extends Controller
     
     public function index()
     {
-        $acts = Activity::all();
-        $actWIG = Activity::where('status', $this->wig)->get();
-        $actIG = Activity::where('status', $this->ig)->get();
-        $WIGWeight = Activity::where('status', $this->wig)->sum('weight');
-        $IGWeight = Activity::where('status', $this->ig)->sum('weight');
-        return view('initiative.index', compact('acts', 'actWIG', 'actIG', 'WIGWeight', 'IGWeight'));
+        $acts = Activity::whereYear('created_at', now()->year)->get();
+        $actWIG = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->get();
+        $actIG = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->get();
+        $WIGWeight = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->sum('weight');
+        $IGWeight = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->sum('weight');
+        
+        $progresActWIG = [];
+
+        foreach ($actWIG as $activity) {
+            $totalProgresActivityUtama = 0;
+            $totalBobot = 0;
+            foreach ($activity->initiatives as $init) {
+                $lastReport = $init->reports->last();
+                $progres = $lastReport ? $lastReport->actual : 0;
+                if ($init->target_type != 'Precentage') {
+                    $progres = ($progres / $init->target) * 100;
+                }
+                $totalBobot += $init->weight;
+                $totalProgresActivityUtama += ($init->weight / 100) * $progres;
+            }
+            $progresActWIG[$activity->id] = $totalProgresActivityUtama;
+        }
+
+        $progresActIG = [];
+
+        foreach ($actIG as $activity) {
+            $totalProgresActivityUtama = 0;
+            $totalBobot = 0;
+            foreach ($activity->initiatives as $init) {
+                $lastReport = $init->reports->last();
+                $progres = $lastReport ? $lastReport->actual : 0;
+                if ($init->target_type != 'Precentage') {
+                    $progres = ($progres / $init->target) * 100;
+                }
+                $totalBobot += $init->weight;
+                $totalProgresActivityUtama += ($init->weight / 100) * $progres;
+            }
+            $progresActIG[$activity->id] = $totalProgresActivityUtama;
+        }
+        
+        return view('initiative.index', compact('acts', 'actWIG', 'actIG', 'WIGWeight', 'IGWeight', 
+        'progresActWIG', 'progresActIG'));
     }
 
     /**
@@ -35,7 +71,7 @@ class InitiativeController extends Controller
      */
     public function create($act_id)
     {
-        $act = Activity::findOrFail($act_id);
+        $act = Activity::whereYear('created_at', now()->year)->findOrFail($act_id);
         $users = User::where('divisi_id', '!=', '1')->orderBy('fullname', 'asc')->get()->pluck('fullname', 'id');
         return view('initiative.create', compact('users', 'act'));
     }
@@ -57,8 +93,13 @@ class InitiativeController extends Controller
                 'target' => 'required',
                 'user_id' => 'required',
             ]);
-
+            
             $actId = $validatedData['activity_id'];
+
+            if ($validatedData['target_type'] == 'Precentage' && $validatedData['target'] > 100) {
+                return redirect(route('init.create', ['act_id' => $actId]))->withErrors(['error' => 'Max precentage target is 100%']);
+            }
+
             $initAll = Initiative::all();
             $currentWeight = 0;
             foreach ($initAll as $init) {
@@ -77,7 +118,7 @@ class InitiativeController extends Controller
     
             return redirect(route('init.index'))->with('success', 'Created Successfully');
         }catch (\Exception $e) {
-            return redirect(route('init.create'))->withErrors(['error' => 'Error: ' . $e->getMessage()]);
+            return redirect(route('init.create', ['act_id' => $actId]))->withErrors(['error' => 'Error: ' . $e->getMessage()]);
         }
     }
 
@@ -123,13 +164,13 @@ class InitiativeController extends Controller
             'target' => 'required',
             'user_id' => 'required',
         ]);
-        
+
         $actId = $init->activity->id;
         $initAll = Initiative::where('id', '!=', $id)->get();
         $currentWeight = 0;
-        foreach ($initAll as $init) {
-            if ($init->activity->id == $actId) {
-                $currentWeight += $init->weight;
+        foreach ($initAll as $in) {
+            if ($in->activity->id == $actId) {
+                $currentWeight += $in->weight;
             }
         }
         
@@ -155,10 +196,31 @@ class InitiativeController extends Controller
     public function destroy($id)
     {
         $init = Initiative::findOrFail($id);
+
+        if ($init->reports->isNotEmpty()) {
+            return redirect(route('init.index'))->with('error', 'Sorry, unable to delete this. Initiative already has reports.');
+        }
+
         if ($init->delete()) {
             return redirect(route('init.index'))->with('success', 'Deleted Successfully');
         }
 
         return redirect(route('init.index'))->with('error', 'Sorry, unable to delete this');
+    }
+
+    public function getProgres($activity_id) {
+        $activity = Activity::whereYear('created_at', now()->year)->findOrFail($activity_id);
+        $totalProgresActivityUtama = 0;
+        $totalBobot = 0;
+
+        foreach ($activity->initiatives as $init) {
+            $lastReport = $init->reports->last();
+            $progres = $lastReport ? $lastReport->actual : 0;
+            $totalBobot += $init->weight;
+            $totalProgresActivityUtama += ($init->weight / 100) * $progres;
+        }
+
+        dd($totalProgresActivityUtama);
+
     }
 }

@@ -23,6 +23,9 @@
     <!-- Bootstrap JavaScript (Popper.js is required) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Numeral JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
     <!-- Templates -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/logo_astra_square.png') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/styles.min.css') }}" />
@@ -59,6 +62,11 @@
 
     .font-11 .col {
         font-size: 11px;
+    }
+
+    .report-link:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
     }
     </style>
 </head>
@@ -160,20 +168,29 @@
                                 </a>
                             </li>
                             <li class="nav-item pt-3">
-                                <h5>Hello, {{ Auth::user()->fullname }}!</h5>
+                                <h5>Depatment {{ Auth::user()->divisi->name }}</h5>
                             </li>
                         </ul>
                         <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                                 <li class="nav-item pt-3">
-                                    <h4>Staff - {{ Auth::user()->divisi->name }}</h4>
+                                    <h5>{{ Auth::user()->fullname }}</h5>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link nav-icon-hover" href="" id="" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35"
-                                            class="rounded-circle">
+                                    <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}" alt="" width="35"
+                                            height="35" class="rounded-circle">
                                     </a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
+                                        aria-labelledby="drop2">
+                                        <div class="message-body">
+                                            <a href="{{ route('staff.showprofile') }}" class="d-flex align-items-center gap-2 dropdown-item">
+                                                <i class="ti ti-user fs-6"></i>
+                                                <p class="mb-0 fs-3">My Profile</p>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -185,6 +202,7 @@
 
             </div>
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
         <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
         <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('assets/js/sidebarmenu.js') }}"></script>
@@ -195,11 +213,6 @@
 
         <script>
         $(document).ready(function() {
-            // $('.show-initiative').click(function(e) {
-            //     e.preventDefault();
-            //     $(this).closest('tr').next('tr').toggle();
-            // });
-
             $('.show-detail').on('click', function(e) {
                 e.preventDefault();
                 var parentCard = $(this).closest('.card-body');
@@ -220,21 +233,30 @@
                 // Menampilkan hasil di dalam elemen hasil-presentase
                 element.textContent = hasilPencapaian + ' %';
             });
+
+            var elements = document.getElementsByClassName('formattedValue');
+
+            // Iterate over each element and format its content
+            for (var i = 0; i < elements.length; i++) {
+                var rawValue = parseInt(elements[i].innerText); // Parse the value as an integer
+
+                // Use Numeral.js to format the value
+                var formattedValue;
+
+                if (rawValue >= 1000000000) {
+                    formattedValue = numeral(rawValue / 1000000000).format('0.0a').toUpperCase() + 'B';
+                } else if (rawValue >= 1000000) {
+                    formattedValue = numeral(rawValue / 1000000).format('0.0a').toUpperCase() + 'M';
+                } else if (rawValue >= 1000) {
+                    formattedValue = numeral(rawValue / 1000).format('0.0a').toUpperCase() + 'K';
+                } else {
+                    formattedValue = rawValue;
+                }
+            
+                // Update the element with the formatted value
+                elements[i].innerText = formattedValue;
+            }
         });
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     var tableBody = document.getElementById('table-body');
-        //     var rowNumber = 1;
-
-        //     // Loop melalui setiap baris tabel
-        //     for (var i = 0; i < tableBody.rows.length; i++) {
-        //         var currentRow = tableBody.rows[i];
-
-        //         // Jika baris memiliki elemen dengan th scope="row", set nomornya
-        //         if (currentRow.querySelector('th[scope="row"]')) {
-        //             currentRow.querySelector('th[scope="row"]').textContent = rowNumber++;
-        //         }
-        //     }
-        // });
         </script>
     </body>
 </body>

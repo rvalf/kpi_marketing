@@ -4,16 +4,28 @@
 <div class="container-fluid">
     <div class="card border">
         <div class="card-body">
+            @if(session('error'))
+            <div class="alert alert-danger mb-3">
+                {{ session('error') }}
+            </div>
+            @endif
+
+            @if(session('success'))
+            <div class="alert alert-success mb-3">
+                {{ session('success') }}
+            </div>
+            @endif
             <a href="{{ route('staff.create') }}" class="btn btn-outline-secondary my-1"><i
                     class="ti ti-plus pe-2"></i>Add New</a>
             <h5 class="card-title fw-semibold my-4">Staff List</h5>
-            <table class="table table-sm table-bordered table-hover">
+            <table id="tableStaff" class="table table-sm table-bordered table-hover">
                 <thead>
                     <tr>
                         <th scope="col" width="30">No</th>
-                        <th scope="col" >Name</th>
-                        <th scope="col" >Email</th>
-                        <th scope="col" >Divisi</th>
+                        <th scope="col">NPK</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Department</th>
                         <th scope="col" class="text-center">Account</th>
                         <th scope="col" class="text-center">Delete</th>
                     </tr>
@@ -26,7 +38,8 @@
                     @endif
                     @foreach ($staffs as $staff)
                     <tr>
-                        <th scope="row" class="text-center">{{ $loop->index+1 }}</th>
+                        <td class="text-center auto-number"></td>
+                        <td>{{ $staff->npk }}</td>
                         <td>{{ $staff->fullname }}</td>
                         <td>{{ $staff->email }}</td>
                         <td>{{ $staff->divisi->name }}</td>
@@ -76,7 +89,7 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-outline-danger"
                                     onclick="return confirm('Are you sure want to delete this?');">
-                                    <i class="ti ti-trash-x"></i>
+                                    <i class="ti ti-trash-x"></i>Nonactive
                                 </button>
                             </form>
                         </td>

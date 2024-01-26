@@ -83,6 +83,7 @@
                                 <td>{{ $init->weight }} %</td>
                                 <td>{{ $init->target }} %</td>
                                 <td>{{ $init->user->fullname }}</td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

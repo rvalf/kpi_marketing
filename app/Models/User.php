@@ -19,10 +19,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
-        'fullname',
-        'email',
         'password',
-        'divisi_id'
+        'email',
+        'npk',
+        'fullname',
+        'divisi_id',
+        'status'
     ];
 
     public function divisi() {
@@ -31,6 +33,10 @@ class User extends Authenticatable
 
     public function initiatives() {
         return $this->hasMany(Initiative::class);
+    }
+
+    public function reports() {
+        return $this->hasMany(PerformanceReport::class);
     }
 
     /**

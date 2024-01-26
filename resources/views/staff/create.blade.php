@@ -20,40 +20,42 @@
                     <h6>Login Information</h6>
                 </div>
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
+                    <label for="username" class="form-label">Username <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="username" name="username"
                         aria-describedby="inputUsername">
                     <div id="inputUsername" class="form-text">example: staff335</div>
                 </div>
-                <div class="mb-5">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password"
-                        aria-describedby="inputPassword">
-                    <div id="inputPassword" class="form-text">password must contain min 8 characters</div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email <span style="color: red;">*</span></label>
+                    <input type="email" class="form-control" id="email" name="email" aria-describedby="inputEmail">
+                    <div id="inputEmail" class="form-text">example: staff335@gmail.com</div>
                 </div>
                 <div class="text-center">
                     <h6>Staff Profile</h6>
                 </div>
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" aria-describedby="inputEmail">
-                    <div id="inputEmail" class="form-text">example: staff335@gmail.com</div>
+                    <label for="npk" class="form-label">NPK (No Induk) <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="npk" name="npk"
+                        aria-describedby="inputnpk">
                 </div>
                 <div class="mb-3">
-                    <label for="fullname" class="form-label">Fullname</label>
+                    <label for="fullname" class="form-label">Fullname <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="fullname" name="fullname"
                         aria-describedby="inputFullname">
                 </div>
                 <div class="mb-3">
-                    <label for="divisi" class="form-label">Divisi</label>
+                    <label for="divisi" class="form-label">Department <span style="color: red;">*</span></label>
                     <select id="divisi" class="form-select" name="divisi_id">
-                        <option value="">Select Divisi</option>
+                        <option value="">Select Department</option>
                         @foreach ($divisis as $divID => $name)
                         <option value="{{ $divID }}" @selected(old('divisi_id') == $divID)>{{ $name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <input type="submit" class="btn btn-primary"></input>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="{{ route('staff.index') }}" class="btn btn-danger">Back</a>
+                </div>
             </form>
         </div>
     </div>

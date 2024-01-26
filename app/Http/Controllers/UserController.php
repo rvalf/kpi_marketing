@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Models\Divisi;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $staffs = User::where('divisi_id', '!=', '1')->get();
+        $staffs = User::where('divisi_id', '!=', '1')->where('status', 'aktif')->get();
         return view('staff.index', compact('staffs'));
     }
 
@@ -40,7 +41,8 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $params = $request->validated();
-        $params['password'] = bcrypt($request->password);
+        $params['password'] = bcrypt($params['npk']);
+        $params['status'] = 'aktif';
         if ($user = User::create($params)){
             return redirect(route('staff.index'))->with('success', 'Created Successfully');
         }
@@ -52,9 +54,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showProfile()
     {
-        //
+        $user = Auth::user();
+        return view ('staff.showprofile', compact('user'));
     }
 
     /**
@@ -77,7 +80,24 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request->all());
+        
+        $user = User::findOrFail($id);
+        
+        $validatedData = $request->validate([
+            'password' => 'required|string|min:8',
+            'confirmPassword' => 'required|string',
+        ]);
+
+        if ($validatedData['password'] != $validatedData['confirmPassword']) {
+            return redirect(route('staff.showprofile'))->with('error', 'Re-type the same password on Confirmation!');
+        }
+
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
+        if ($user->update($validatedData)) {
+            return redirect(route('staff.showprofile'))->with('success', 'Change password success!');
+        }
     }
 
     /**
@@ -89,7 +109,8 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        if ($user->delete()){
+        $data['status'] = 'nonaktif';
+        if ($user->update($data)) {
             return redirect(route('staff.index'))->with('success', 'Deleted Successfully');
         }
 

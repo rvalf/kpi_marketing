@@ -4,14 +4,25 @@
 <div class="container-fluid">
     <div class="card border">
         <div class="card-body">
+            @if(session('error'))
+            <div class="alert alert-danger mb-3">
+                {{ session('error') }}
+            </div>
+            @endif
+
+            @if(session('success'))
+            <div class="alert alert-success mb-3">
+                {{ session('success') }}
+            </div>
+            @endif
             <a href="{{ route('div.create') }}" class="btn btn-outline-secondary my-1"><i
                     class="ti ti-plus pe-2"></i>Add New</a>
-            <h5 class="card-title fw-semibold my-4">Divisi List</h5>
-            <table class="table table-sm table-bordered table-hover">
+            <h5 class="card-title fw-semibold my-4">Department List</h5>
+            <table id="tableDivisi" class="table table-sm table-bordered table-hover">
                 <thead>
                     <tr>
                         <th scope="col" width="30">No</th>
-                        <th scope="col">Divisi Name</th>
+                        <th scope="col">Department Name</th>
                         <th scope="col" class="text-center">Edit</th>
                         <th scope="col" class="text-center">Delete</th>
                     </tr>
@@ -24,7 +35,7 @@
                     @endif
                     @foreach ($divisis as $div)
                     <tr>
-                        <th scope="row" class="text-center">{{ $loop->index+1 }}</th>
+                        <td class="text-center auto-number"></td>
                         <td>{{ $div->name }}</td>
                         <td class="text-center">
                             <a href="{{ route('div.edit', ['id' => $div->id ]) }}"

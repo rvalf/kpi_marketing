@@ -97,6 +97,10 @@ class DivisiController extends Controller
     public function destroy($id)
     {
         $divisi = Divisi::findOrFail($id);
+        if ($divisi->users->isNotEmpty()) {
+            return redirect(route('div.index'))->with('error', 'Sorry, unable to delete this. Department already has staffs.');
+        }
+        
         if ($divisi->delete()){
             return redirect(route('div.index'))->with('success', 'Deleted Successfully');
         }

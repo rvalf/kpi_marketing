@@ -27,6 +27,22 @@
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/logo_astra_square.png') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/styles.min.css') }}" />
 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Numeral JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js">
+    </script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+
     <style>
     .table .bg-success th,
     .table .bg-success td {
@@ -56,11 +72,19 @@
     .dropdown button::after {
         content: none;
     }
+
+    .font-11 .col {
+        font-size: 11px;
+    }
+
+    .report-link:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
     </style>
 </head>
 
 <body>
-
     <body>
         <!--  Body Wrapper -->
         <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -84,8 +108,8 @@
                                 <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                                 <span class="hide-menu">Home</span>
                             </li>
-                            <li class="sidebar-item">
-                                <a class="sidebar-link" href="./index.html" aria-expanded="false">
+                            <li class="sidebar-item ">
+                                <a class="sidebar-link" href="{{ route('home') }}" aria-expanded="false">
                                     <span>
                                         <i class="ti ti-activity"></i>
                                     </span>
@@ -129,7 +153,7 @@
                                     <span>
                                         <i class="ti ti-divide"></i>
                                     </span>
-                                    <span class="hide-menu">Divisi</span>
+                                    <span class="hide-menu">Department</span>
                                 </a>
                             </li>
                             <li class="nav-small-cap">
@@ -168,19 +192,20 @@
                                 </a>
                             </li>
                             <li class="nav-item pt-3">
-                                <h5>Hello, {{ Auth::user()->fullname }}!</h5>
+                                <h5 class="mb-1">Manager</h5>
+                                <p class="m-0" style="font-size:12px">KPI Tracker {{ now()->year }}</p>
                             </li>
                         </ul>
                         <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                                 <li class="nav-item pt-3">
-                                    <h4>Manager</h4>
+                                    <h5>{{ Auth::user()->fullname }}</h5>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link nav-icon-hover" href="" id="" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35"
-                                            class="rounded-circle">
+                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}" alt="" width="35"
+                                            height="35" class="rounded-circle">
                                     </a>
                                 </li>
                             </ul>
@@ -192,20 +217,37 @@
                 @yield('content')
             </div>
         </div>
-        <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-        <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../assets/js/sidebarmenu.js"></script>
-        <script src="../assets/js/app.min.js"></script>
-        <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-        <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
-        <script src="../assets/js/dashboard.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+        <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('assets/js/sidebarmenu.js') }}"></script>
+        <script src="{{ asset('assets/js/app.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/simplebar/dist/simplebar.js') }}"></script>
+        <script src="{{ asset('assets/js/dashboard.js') }}"></script>
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
         $(document).ready(function() {
-            // $('.show-initiative').click(function(e) {
-            //     e.preventDefault();
-            //     $(this).closest('tr').next('tr').toggle();
-            // });
+            var tableDivisi = $('#tableDivisi').DataTable();
+
+            // Update nomor otomatis saat setiap kali tabel di-sort
+            tableDivisi.on('order.dt search.dt', function() {
+                tableDivisi.column(0, { order: 'applied' }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+            
+            var tableStaff = $('#tableStaff').DataTable();
+
+            // Update nomor otomatis saat setiap kali tabel di-sort
+            tableStaff.on('order.dt search.dt', function() {
+                tableStaff.column(0, { order: 'applied' }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
 
             $('.show-detail').on('click', function(e) {
                 e.preventDefault();
@@ -213,21 +255,54 @@
                 parentCard.find('.details').slideToggle();
                 return false;
             });
+
+            var hasilPresentaseElements = document.querySelectorAll('.hasil-presentase');
+
+            // Loop melalui setiap elemen hasil-presentase dan hitung serta set nilai persentase pencapaian
+            hasilPresentaseElements.forEach(function(element, index) {
+                var planning = parseFloat(document.querySelectorAll('.planning')[index].textContent);
+                var actual = parseFloat(document.querySelectorAll('.aktual')[index].textContent);
+
+                // Menghitung persentase pencapaian dan membulatkannya ke bilangan bulat
+                var hasilPencapaian = Math.round((actual / planning) * 100);
+
+                // Menampilkan hasil di dalam elemen hasil-presentase
+                element.textContent = hasilPencapaian + ' %';
+            });
+
+            function formatNumber(value, suffix) {
+                const formatted = numeral(value).format('0.0a').toUpperCase();
+                // Check if the value after the decimal point is 0
+                if (formatted.endsWith('.0')) {
+                    // Remove the '.0' part
+                    return formatted.slice(0, -2) + suffix;
+                }
+                return formatted + suffix;
+            }
+
+            var elements = document.getElementsByClassName('formattedValue');
+
+            // Iterate over each element and format its content
+            for (var i = 0; i < elements.length; i++) {
+                var rawValue = parseInt(elements[i].innerText); // Parse the value as an integer
+
+                // Use Numeral.js to format the value
+                var formattedValue;
+
+                if (rawValue >= 1000000000) {
+                    formattedValue = formatNumber(rawValue / 1000000000, ' B');
+                } else if (rawValue >= 1000000) {
+                    formattedValue = formatNumber(rawValue / 1000000, ' M');
+                } else if (rawValue >= 1000) {
+                    formattedValue = formatNumber(rawValue / 1000, ' K');
+                } else {
+                    formattedValue = rawValue;
+                }
+
+                // Update the element with the formatted value
+                elements[i].innerText = formattedValue;
+            }
         });
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     var tableBody = document.getElementById('table-body');
-        //     var rowNumber = 1;
-
-        //     // Loop melalui setiap baris tabel
-        //     for (var i = 0; i < tableBody.rows.length; i++) {
-        //         var currentRow = tableBody.rows[i];
-
-        //         // Jika baris memiliki elemen dengan th scope="row", set nomornya
-        //         if (currentRow.querySelector('th[scope="row"]')) {
-        //             currentRow.querySelector('th[scope="row"]').textContent = rowNumber++;
-        //         }
-        //     }
-        // });
         </script>
     </body>
 </body>

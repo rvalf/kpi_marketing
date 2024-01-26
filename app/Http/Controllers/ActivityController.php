@@ -18,40 +18,76 @@ class ActivityController extends Controller
     private string $wig = 'Wildly Important Goal (WIG)';
     private string $ig = 'Important Goal (IG)';
 
-    private function checkWeight($status, $weight) {
-        if ($status == $this->wig) {
-            $currentWIGWeight = Activity::where('status', $this->wig)->sum('weight');
-            $maxWeight = Activity::$_maxWeightWIG - $currentWIGWeight;
+    // private function checkWeight($status, $weight) {
+    //     if ($status == $this->wig) {
+    //         $currentWIGWeight = Activity::where('status', $this->wig)->sum('weight');
+    //         $maxWeight = Activity::$_maxWeightWIG - $currentWIGWeight;
 
-            if ($maxWeight == 0) {
-                return redirect(route('act.create'))->withErrors(['error' => 'Acitvity WIG is Full!']);
-            }
+    //         if ($maxWeight == 0) {
+    //             return redirect(route('act.create'))->withErrors(['error' => 'Acitvity WIG is Full!']);
+    //         }
 
-            if ($weight > $maxWeight) {
-                return redirect(route('act.create'))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
-            }
-        } else {
-            $currentIGWeight = Activity::where('status', $this->ig)->sum('weight');
-            $maxWeight = Activity::$_maxWeightIG - $currentIGWeight;
+    //         if ($weight > $maxWeight) {
+    //             return redirect(route('act.create'))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
+    //         }
+    //     } else {
+    //         $currentIGWeight = Activity::where('status', $this->ig)->sum('weight');
+    //         $maxWeight = Activity::$_maxWeightIG - $currentIGWeight;
 
-            if ($maxWeight == 0) {
-                return redirect(route('act.create'))->withErrors(['error' => 'Acitvity IG is Full!']);
-            }
+    //         if ($maxWeight == 0) {
+    //             return redirect(route('act.create'))->withErrors(['error' => 'Acitvity IG is Full!']);
+    //         }
 
-            if ($weight > $maxWeight) {
-                return redirect(route('act.create'))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
-            }
-        }
-    }
+    //         if ($weight > $maxWeight) {
+    //             return redirect(route('act.create'))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
+    //         }
+    //     }
+    // }
 
     public function index()
     {
-        $acts = Activity::all();
-        $actWIG = Activity::where('status', $this->wig)->get();
-        $actIG = Activity::where('status', $this->ig)->get();
-        $WIGWeight = Activity::where('status', $this->wig)->sum('weight');
-        $IGWeight = Activity::where('status', $this->ig)->sum('weight');
-        return view('activity.index', compact('acts', 'actWIG', 'actIG', 'WIGWeight', 'IGWeight'));
+        $acts = Activity::whereYear('created_at', now()->year)->get();
+        $actWIG = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->get();
+        $actIG = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->get();
+        $WIGWeight = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->sum('weight');
+        $IGWeight = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->sum('weight');
+
+        $progresActWIG = [];
+
+        foreach ($actWIG as $activity) {
+            $totalProgresActivityUtama = 0;
+            $totalBobot = 0;
+            foreach ($activity->initiatives as $init) {
+                $lastReport = $init->reports->last();
+                $progres = $lastReport ? $lastReport->actual : 0;
+                if ($init->target_type != 'Precentage') {
+                    $progres = ($progres / $init->target) * 100;
+                }
+                $totalBobot += $init->weight;
+                $totalProgresActivityUtama += ($init->weight / 100) * $progres;
+            }
+            $progresActWIG[$activity->id] = $totalProgresActivityUtama;
+        }
+
+        $progresActIG = [];
+
+        foreach ($actIG as $activity) {
+            $totalProgresActivityUtama = 0;
+            $totalBobot = 0;
+            foreach ($activity->initiatives as $init) {
+                $lastReport = $init->reports->last();
+                $progres = $lastReport ? $lastReport->actual : 0;
+                if ($init->target_type != 'Precentage') {
+                    $progres = ($progres / $init->target) * 100;
+                }
+                $totalBobot += $init->weight;
+                $totalProgresActivityUtama += ($init->weight / 100) * $progres;
+            }
+            $progresActIG[$activity->id] = $totalProgresActivityUtama;
+        }
+
+        return view('activity.index', compact('acts', 'actWIG', 'actIG', 'WIGWeight', 'IGWeight',
+        'progresActWIG', 'progresActIG'));
     }
 
     /**
@@ -61,8 +97,8 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        $actsWIG = Activity::where('status', 'Wildly Important Goal (WIG)')->get();
-        $actsIG = Activity::where('status', 'Important Goal (IG)')->get();
+        $actsWIG = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->get();
+        $actsIG = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->get();
         return view('activity.create', compact('actsWIG', 'actsIG'));
     }
 
@@ -75,7 +111,7 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         if ($request->input('status') == $this->wig) {
-            $currentWIGWeight = Activity::where('status', $this->wig)->sum('weight');
+            $currentWIGWeight = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->sum('weight');
             $maxWeight = Activity::$_maxWeightWIG - $currentWIGWeight;
 
             if ($maxWeight == 0) {
@@ -86,7 +122,7 @@ class ActivityController extends Controller
                 return redirect(route('act.create'))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
             }
         } else {
-            $currentIGWeight = Activity::where('status', $this->ig)->sum('weight');
+            $currentIGWeight = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->sum('weight');
             $maxWeight = Activity::$_maxWeightIG - $currentIGWeight;
 
             if ($maxWeight == 0) {
@@ -103,9 +139,10 @@ class ActivityController extends Controller
                 'status' => 'required',
                 'objective' => 'required',
                 'weight' => 'required',
-                'target_type' => 'required',
-                'target' => 'required',
             ]);
+
+            $validatedData['target_type'] = 'Precentage';
+            $validatedData['target'] = 100;
     
             Activity::create($validatedData);
     
@@ -134,9 +171,9 @@ class ActivityController extends Controller
      */
     public function edit($id)
     {
-        $activity = Activity::findOrFail($id);
-        $actsWIG = Activity::where('status', 'Wildly Important Goal (WIG)')->get();
-        $actsIG = Activity::where('status', 'Important Goal (IG)')->get();
+        $activity = Activity::whereYear('created_at', now()->year)->findOrFail($id);
+        $actsWIG = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->get();
+        $actsIG = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->get();
         return view('activity.edit', compact('activity', 'actsWIG', 'actsIG'));
     }
 
@@ -150,7 +187,7 @@ class ActivityController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->input('status') == $this->wig) {
-            $currentWIGWeight = Activity::where('status', $this->wig)->sum('weight');
+            $currentWIGWeight = Activity::where('status', $this->wig)->where('id', '!=', $id)->whereYear('created_at', now()->year)->sum('weight'); 
             $maxWeight = Activity::$_maxWeightWIG - $currentWIGWeight;
 
             if ($maxWeight == 0) {
@@ -161,7 +198,7 @@ class ActivityController extends Controller
                 return redirect(route('act.edit', ['id' => $id]))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
             }
         } else {
-            $currentIGWeight = Activity::where('status', $this->ig)->sum('weight');
+            $currentIGWeight = Activity::where('status', $this->ig)->where('id', '!=', $id)->whereYear('created_at', now()->year)->sum('weight');
             $maxWeight = Activity::$_maxWeightIG - $currentIGWeight;
 
             if ($maxWeight == 0) {
@@ -173,13 +210,11 @@ class ActivityController extends Controller
             }
         }
 
-        $activity = Activity::findOrFail($id);
+        $activity = Activity::whereYear('created_at', now()->year)->findOrFail($id);
         $validatedData = $request->validate([
             'status' => 'required', 
             'objective' => 'required',
             'weight' => 'required',
-            'target_type' => 'required',
-            'target' => 'required',
          ]);
 
         if ($activity->update($validatedData)) {
@@ -198,7 +233,11 @@ class ActivityController extends Controller
      */
     public function destroy($id)
     {
-        $activity = Activity::findOrFail($id);
+        $activity = Activity::whereYear('created_at', now()->year)->findOrFail($id);
+        if ($activity->initiatives->isNotEmpty()) {
+            return redirect(route('act.index'))->with('error', 'Sorry, unable to delete this. Activity already has initiatives.');
+        }
+
         if ($activity->delete()) {
             return redirect(route('act.index'))->with('success', 'Deleted Successfully');
         }

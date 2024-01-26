@@ -51,34 +51,6 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label for="target_type" class="form-label">Target Type</label>
-                            <select id="target_type" class="form-select" name="target_type">
-                                <option value="Precentage"
-                                    {{ old('target_type', $activity->target_type) === 'Percentage' ? 'selected' : '' }}>
-                                    Precentage (%)</option>
-                                <option value="Number"
-                                    {{ old('target_type', $activity->target_type) === 'Number' ? 'selected' : '' }}>
-                                    Number (123)
-                                </option>
-                                <option value="Rupiah"
-                                    {{ old('target_type', $activity->target_type) === 'Rupiah' ? 'selected' : '' }}>
-                                    Rupiah (Rp.)
-                                </option>
-                            </select>
-                            @error('target_type')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="target" class="form-label">Target</label>
-                            <input type="number" class="form-control" id="target" name="target"
-                                aria-describedby="inputExplain" value="{{ old('target', $activity->target) }}">
-                            <div id="inputExplain" class="form-text">Number input only, example: 20 (will be 20%).</div>
-                            @error('target')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                             <a href="{{ route('act.index') }}" class="btn btn-danger">Back</a>

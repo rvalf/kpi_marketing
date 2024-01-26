@@ -24,9 +24,9 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => ['required', 'unique:users', 'string', 'max:255', 'regex:/^\S*$/u'],
-            'password' => ['required', 'string', 'min:8'], // Minimal 8 karakter
+            'username' => ['required', 'unique:users', 'string', 'min:8', 'regex:/^\S*$/u'],
             'email' => ['required', 'unique:users', 'string', 'max:255', 'email'], // Validasi format email
+            'npk' => ['required', 'string', 'unique:users'],
             'fullname' => ['required', 'string', 'max:255'],
             'divisi_id' => ['required'],
         ];
