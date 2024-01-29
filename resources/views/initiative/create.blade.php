@@ -22,13 +22,13 @@
                         <div class="mb-3">
                             <label for="initiative" class="form-label">Initiative</label>
                             <textarea class="form-control" id="initiative" name="initiative"
-                                aria-describedby="textareaExplain" required></textarea>
+                                aria-describedby="textareaExplain" required value="{{ old('initiative') }}"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="weight" class="form-label">Weight (Bobot)</label>
                             <div class="input-group">
                                 <input type="number" class="form-control" id="weight" name="weight"
-                                    aria-describedby="inputExplain" required>
+                                    aria-describedby="inputExplain" required value="{{ old('weight') }}">
                                 <span class="input-group-text">%</span><br>
                             </div>
                             <div id="inputExplain" class="form-text">Number input only, example: 20 (will be 20%).</div>
@@ -37,7 +37,7 @@
                             <label for="target_type" class="form-label">Target Type</label>
                             <select id="target_type" class="form-select" name="target_type" required>
                                 <option value="">Select Type</option>
-                                <option value="Precentage">Precentage (%)</option>
+                                <option value="Precentage" @selected(old('target_type') == 'Precentage')>Precentage (%)</option>
                                 <option value="Number">Number (123)</option>
                                 <option value="Rupiah">Rupiah (Rp.)</option>
                             </select>
@@ -45,7 +45,7 @@
                         <div class="mb-3">
                             <label for="target" class="form-label">Target</label>
                             <input type="number" class="form-control" id="target" name="target"
-                                aria-describedby="inputExplain" required>
+                                aria-describedby="inputExplain" required value="{{ old('target') }}">
                             <div id="inputExplain" class="form-text">Number input only, example: 20 (will be 20%).</div>
                         </div>
                         <div class="mb-3">

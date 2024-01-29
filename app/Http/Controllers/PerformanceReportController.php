@@ -174,8 +174,8 @@ class PerformanceReportController extends Controller
     {
         $user = Auth::user();
         $initiative = Initiative::findOrFail($initiative_id);
-        $reports = PerformanceReport::where('initiative_id', $initiative_id)->get();
         try {
+            
             $validatedData = $request->validate([
                 'month' => 'required',
                 'plan' => 'required|numeric',
@@ -185,6 +185,11 @@ class PerformanceReportController extends Controller
                 'corrective_action' => 'required',
                 'file' => 'nullable',
             ]);
+            
+            $currentMonth = now()->format('M');
+            if ($validatedData['month'] != $currentMonth) {
+                return redirect(route('report.index'))->withErrors(['error' => 'Unable to create Report']);
+            }
 
             if ($initiative->target_type == 'Precentage' && $validatedData['actual'] > 100) {
                 return redirect(route('report.index'))->withErrors(['error' => 'Max target is 100%!']);

@@ -18,7 +18,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <!-- Templates -->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/logo_astra_square.png') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/styles.min.css') }}" />
 </head>
 
@@ -36,7 +36,7 @@
                                 <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
                                     <img src="{{ asset('/assets/images/logos/logo_astra_final.png') }}" width="180" alt="">
                                 </a>
-                                <p class="text-center">KPI Marketing - DPP</p>
+                                <p class="text-center">KPI Tracker</p>
                                 <form method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="mb-3">
@@ -74,8 +74,8 @@
             </div>
         </div>
     </div>
-    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 
 </html>

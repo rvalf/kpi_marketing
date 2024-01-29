@@ -10,7 +10,7 @@
                 <div class="mb-3">
                     <label for="name" class="form-label">Department Name</label>
                     <input type="text" class="form-control" id="name" name="name" aria-describedby="inputExplain"
-                        required>
+                        required value="{{ old('name') }}">
                     <div id="inputExplain" class="form-text">example: Marketing, Sales, Admin, etc.</div>
                 </div>
                 <div class="d-flex justify-content-between">

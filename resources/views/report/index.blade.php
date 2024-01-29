@@ -35,11 +35,19 @@
                 $currentDay = now()->day;
             @endphp
 
-            @if ($currentDay > 15 && (!$lastReportMonth || $lastReportMonth !== $currentMonth))
+            @if ($currentDay > 15 && ($lastReportMonth === null))
                 <div class="alert alert-warning mb-3">
                     <i class="ti ti-info-circle pe-2"></i>Warning! You haven't made a report this month, add it immediately before the deadline on the 25th.
                 </div>
-            @elseif ($currentDay >= 25 && (!$lastReportMonth || $lastReportMonth !== $currentMonth))
+            @elseif ($currentDay > 15 && ($lastReportMonth !== $currentMonth))
+                <div class="alert alert-warning mb-3">
+                    <i class="ti ti-info-circle pe-2"></i>Warning! You haven't made a report this month, add it immediately before the deadline on the 25th.
+                </div>
+            @elseif ($currentDay > 25 && ($lastReportMonth === null))
+                <div class="alert alert-warning mb-3">
+                    <i class="ti ti-alert-triangle pe-2"></i>Danger! The report deadline has passed. Please submit your report as soon as possible.
+                </div>
+            @elseif ($currentDay > 25 && ($lastReportMonth !== $currentMonth))
                 <div class="alert alert-warning mb-3">
                     <i class="ti ti-alert-triangle pe-2"></i>Danger! The report deadline has passed. Please submit your report as soon as possible.
                 </div>
@@ -236,8 +244,8 @@
                                                                     ({{ $report->user->status }})</p>
                                                             </div>
                                                             <div class="ps-5">
-                                                                <p class="m-0" style="font-size:11px">submitted on :</p>
-                                                                <p class="m-0 fw-bold">{{ $report->created_at }}</p>
+                                                                <p class="m-0" style="font-size:11px">submitted on <span class="text-danger">{{ $report->created_at->format('d') > 25 ? '(overdue report)' : '' }}</span> :</p>
+                                                                <p class="m-0 fw-bold">{{ $report->created_at->format('d M Y H:i:s') }}</p>
                                                             </div>
                                                         </div>
                                                         <form

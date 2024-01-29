@@ -22,12 +22,12 @@
                 <div class="mb-3">
                     <label for="username" class="form-label">Username <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="username" name="username"
-                        aria-describedby="inputUsername">
+                        aria-describedby="inputUsername" value="{{ old('username') }}">
                     <div id="inputUsername" class="form-text">example: staff335</div>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email <span style="color: red;">*</span></label>
-                    <input type="email" class="form-control" id="email" name="email" aria-describedby="inputEmail">
+                    <input type="email" class="form-control" id="email" name="email" aria-describedby="inputEmail" value="{{ old('email') }}">
                     <div id="inputEmail" class="form-text">example: staff335@gmail.com</div>
                 </div>
                 <div class="text-center">
@@ -36,12 +36,12 @@
                 <div class="mb-3">
                     <label for="npk" class="form-label">NPK (No Induk) <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="npk" name="npk"
-                        aria-describedby="inputnpk">
+                        aria-describedby="inputnpk" value="{{ old('npk') }}">
                 </div>
                 <div class="mb-3">
                     <label for="fullname" class="form-label">Fullname <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="fullname" name="fullname"
-                        aria-describedby="inputFullname">
+                        aria-describedby="inputFullname" value="{{ old('fullname') }}">
                 </div>
                 <div class="mb-3">
                     <label for="divisi" class="form-label">Department <span style="color: red;">*</span></label>

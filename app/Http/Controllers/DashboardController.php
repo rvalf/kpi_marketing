@@ -154,12 +154,12 @@ class DashboardController extends Controller
             $grandTotalProgres += ($activity->weight / 100) * $progresActIG[$activity->id]; 
         }
 
-        // return view('export-chart', compact('actWIG', 'actIG', 'progresActWIG', 'progresActIG', 
-        // 'grandTotalProgres'));
-
-        $pdf = Pdf::loadView('export-chart', compact('actWIG', 'actIG', 'progresActWIG', 'progresActIG', 
+        return view('export-chart', compact('actWIG', 'actIG', 'progresActWIG', 'progresActIG', 
         'grandTotalProgres'));
-        return $pdf->download('activity.pdf');
+
+        // $pdf = Pdf::loadView('export-chart', compact('actWIG', 'actIG', 'progresActWIG', 'progresActIG', 
+        // 'grandTotalProgres'));
+        // return $pdf->download('activity.pdf');
     }
 
     public function countMyTask()

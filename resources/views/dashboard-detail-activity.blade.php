@@ -218,8 +218,11 @@
                                                                     </div>
                                                                     <div class="ps-5">
                                                                         <p class="m-0" style="font-size:11px">submitted
-                                                                            on :</p>
-                                                                        <p class="m-0 fw-bold">{{ $report->created_at }}
+                                                                            on <span
+                                                                                class="text-danger">{{ $report->created_at->format('d') > 25 ? '(overdue report)' : '' }}</span>
+                                                                            :</p>
+                                                                        <p class="m-0 fw-bold">
+                                                                            {{ $report->created_at->format('d M Y H:i:s') }}
                                                                         </p>
                                                                     </div>
                                                                 </div>
