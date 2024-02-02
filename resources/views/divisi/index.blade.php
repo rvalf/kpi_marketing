@@ -21,8 +21,8 @@
             <table id="tableDivisi" class="table table-sm table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th scope="col" width="30">No</th>
-                        <th scope="col">Department Name</th>
+                        <th scope="col" width="30" class="text-center">No</th>
+                        <th scope="col" class="text-center">Department Name</th>
                         <th scope="col" class="text-center">Edit</th>
                         <th scope="col" class="text-center">Delete</th>
                     </tr>
@@ -42,16 +42,37 @@
                                 class="btn btn-sm btn-outline-primary"><i class="ti ti-edit"></i></a>
                         </td>
                         <td class="text-center">
-                            <form action="{{ route('div.delete', ['id' => $div->id]) }}" method="POST"
-                                style="display: inline;">
+                            <form id="deleteForm_{{ $div->id }}" action="{{ route('div.delete', ['id' => $div->id]) }}"
+                                method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Are you sure want to delete this?');">
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                    onclick="confirmDelete('{{ $div->id }}')">
                                     <i class="ti ti-trash-x"></i>
                                 </button>
                             </form>
                         </td>
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <script>
+                        function confirmDelete(divId) {
+                            Swal.fire({
+                                title: 'Delete Department',
+                                text: 'Are you sure you want to delete this?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Delete',
+                                customClass: {
+                                    popup: 'swal2-sm'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.getElementById('deleteForm_' + divId).submit();
+                                }
+                            });
+                        }
+                        </script>
                     </tr>
                     @endforeach
                 </tbody>

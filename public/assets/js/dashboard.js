@@ -486,5 +486,68 @@ $.ajax({
         console.error('Error fetching mytask chart data:', error);
     }
   });
+
+//   $.ajax({
+//     url: '/dept-task-data',
+//     type: 'GET',
+//     dataType: 'json',
+//     success: function(data) {
+//     for (let i = 0; i < data.length; i++) {
+//         var mytask2 = {
+//             color: "#adb5bd",
+//             series: data[i].series,
+//             labels: ["Complete", "On Progres", "Not yet started"],
+//             chart: {
+//               width: 180,
+//               type: "donut",
+//               fontFamily: "Plus Jakarta Sans', sans-serif",
+//               foreColor: "#adb0bb",
+//             },
+//             plotOptions: {
+//               pie: {
+//                 startAngle: 0,
+//                 endAngle: 360,
+//                 donut: {
+//                   size: '75%',
+//                 },
+//               },
+//             },
+//             stroke: {
+//               show: false,
+//             },
+        
+//             dataLabels: {
+//               enabled: false,
+//             },
+        
+//             legend: {
+//               show: false,
+//             },
+//             colors: ["#5D87FF", "#81b5fc", "#d2e3fa"],
+        
+//             responsive: [
+//               {
+//                 breakpoint: 991,
+//                 options: {
+//                   chart: {
+//                     width: 150,
+//                   },
+//                 },
+//               },
+//             ],
+//             tooltip: {
+//               theme: "dark",
+//               fillSeriesColor: false,
+//             },
+//           };
+      
+//           var chart = new ApexCharts(document.querySelector("#deptTask_"+i), mytask2);
+//           chart.render();
+//         },
+//         error: function(error) {
+//             console.error('Error fetching mytask chart data:', error);
+//         }
+//     }
+//   });
   
 });

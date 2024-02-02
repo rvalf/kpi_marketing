@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreActivityRequest;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -17,33 +18,7 @@ class ActivityController extends Controller
     
     private string $wig = 'Wildly Important Goal (WIG)';
     private string $ig = 'Important Goal (IG)';
-
-    // private function checkWeight($status, $weight) {
-    //     if ($status == $this->wig) {
-    //         $currentWIGWeight = Activity::where('status', $this->wig)->sum('weight');
-    //         $maxWeight = Activity::$_maxWeightWIG - $currentWIGWeight;
-
-    //         if ($maxWeight == 0) {
-    //             return redirect(route('act.create'))->withErrors(['error' => 'Acitvity WIG is Full!']);
-    //         }
-
-    //         if ($weight > $maxWeight) {
-    //             return redirect(route('act.create'))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
-    //         }
-    //     } else {
-    //         $currentIGWeight = Activity::where('status', $this->ig)->sum('weight');
-    //         $maxWeight = Activity::$_maxWeightIG - $currentIGWeight;
-
-    //         if ($maxWeight == 0) {
-    //             return redirect(route('act.create'))->withErrors(['error' => 'Acitvity IG is Full!']);
-    //         }
-
-    //         if ($weight > $maxWeight) {
-    //             return redirect(route('act.create'))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
-    //         }
-    //     }
-    // }
-
+    
     public function index()
     {
         $acts = Activity::whereYear('created_at', now()->year)->get();
@@ -108,8 +83,10 @@ class ActivityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreActivityRequest $request)
     {
+        $params = $request->validated();
+
         if ($request->input('status') == $this->wig) {
             $currentWIGWeight = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->sum('weight');
             $maxWeight = Activity::$_maxWeightWIG - $currentWIGWeight;
@@ -135,16 +112,10 @@ class ActivityController extends Controller
         }
 
         try {
-            $validatedData = $request->validate([
-                'status' => 'required',
-                'objective' => 'required',
-                'weight' => 'required',
-            ]);
-
-            $validatedData['target_type'] = 'Precentage';
-            $validatedData['target'] = 100;
+            $params['target_type'] = 'Precentage';
+            $params['target'] = 100;
     
-            Activity::create($validatedData);
+            Activity::create($params);
     
             return redirect(route('act.index'))->with('success', 'Created Successfully');
         }catch (\Exception $e) {

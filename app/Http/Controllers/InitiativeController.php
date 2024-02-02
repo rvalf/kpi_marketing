@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInitiativeRequest;
 use App\Models\Activity;
 use App\Models\Initiative;
 use App\Models\User;
@@ -82,39 +83,31 @@ class InitiativeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreInitiativeRequest $request)
     {
+        $params = $request->validated();
+
+        $actId = $params['activity_id'];
+
+        if ($params['target_type'] == 'Precentage' && $params['target'] > 100) {
+            return redirect(route('init.create', ['act_id' => $actId]))->withErrors(['error' => 'Max precentage target is 100%'])->withInput($request->input());
+        }
+        $initAll = Initiative::all();
+        $currentWeight = 0;
+        foreach ($initAll as $init) {
+            if ($init->activity->id == $actId) {
+                $currentWeight += $init->weight;
+            }
+        }
+        
+        $maxWeight = 100 - $currentWeight;
+        $validatedWeight = intval($params['weight']);
+        if ($validatedWeight > $maxWeight) {
+            return redirect(route('init.create', ['act_id' => $actId]))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!'])->withInput($request->input());
+        }
+
         try {
-            $validatedData = $request->validate([
-                'activity_id' => 'required',
-                'initiative' => 'required',
-                'weight' => 'required',
-                'target_type' => 'required',
-                'target' => 'required',
-                'user_id' => 'required',
-            ]);
-            
-            $actId = $validatedData['activity_id'];
-
-            if ($validatedData['target_type'] == 'Precentage' && $validatedData['target'] > 100) {
-                return redirect(route('init.create', ['act_id' => $actId]))->withErrors(['error' => 'Max precentage target is 100%']);
-            }
-
-            $initAll = Initiative::all();
-            $currentWeight = 0;
-            foreach ($initAll as $init) {
-                if ($init->activity->id == $actId) {
-                    $currentWeight += $init->weight;
-                }
-            }
-            
-            $maxWeight = 100 - $currentWeight;
-            $validatedWeight = intval($validatedData['weight']);
-            if ($validatedWeight > $maxWeight) {
-                return redirect(route('init.create', ['act_id' => $actId]))->withErrors(['error' => 'Max Weight '.$maxWeight.'%!']);
-            }
-    
-            Initiative::create($validatedData);
+            Initiative::create($params);
     
             return redirect(route('init.index'))->with('success', 'Created Successfully');
         }catch (\Exception $e) {

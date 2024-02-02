@@ -60,16 +60,39 @@
                                                 class="ti ti-edit"></i>
                                             Edit</a></li>
                                     <li>
-                                        <form action="{{ route('act.delete', ['id' => $act->id]) }}" method="POST"
+                                        <form id="deleteForm_{{ $act->id }}"
+                                            action="{{ route('act.delete', ['id' => $act->id]) }}" method="POST"
                                             style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger"
-                                                onclick="return confirm('Are you sure want to delete this?');">
+                                            <button type="button" class="dropdown-item text-danger"
+                                                onclick="confirmDelete('{{ $act->id }}')">
                                                 <i class="ti ti-trash-x"></i> Delete
                                             </button>
                                         </form>
                                     </li>
+
+                                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                    <script>
+                                    function confirmDelete(actId) {
+                                        Swal.fire({
+                                            title: 'Delete Activity',
+                                            text: 'Are you sure you want to delete this? If the activity already has initiatives, the data cannot be deleted.',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#d33',
+                                            cancelButtonColor: '#3085d6',
+                                            confirmButtonText: 'Delete',
+                                            customClass: {
+                                                popup: 'swal2-sm'
+                                            }
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('deleteForm_' + actId).submit();
+                                            }
+                                        });
+                                    }
+                                    </script>
                                     @endif
                                 </ul>
                             </div>
@@ -77,7 +100,8 @@
                     </div>
                     <div class="target mt-2">
                         @if ($act->target_type == 'Rupiah')
-                        <p class="m-0" style="font-size: 11px;">Target : Rp. <span class="formattedValue">{{ $act->target }}</span></p>
+                        <p class="m-0" style="font-size: 11px;">Target : Rp. <span
+                                class="formattedValue">{{ $act->target }}</span></p>
                         @elseif ($act->target_type == 'Precentage')
                         <p class="m-0" style="font-size: 11px;">Target : {{ $act->target }} %</p>
                         @else
@@ -113,27 +137,28 @@
                                         <td>{{ $init->user->fullname }}</td>
                                         <td>
                                             @if ($init->reports && $lastReport = $init->reports->last())
-                                                @if ($init->target_type != 'Precentage')
-                                                @php 
-                                                    $lastReportActual = $init->reports->last()->actual;
-                                                    $currentProgres = ($lastReportActual/$init->target) * 100;
-                                                    @endphp
-                                                    <div class="progress" role="progressbar" aria-label="Success example"
-                                                        aria-valuenow="{{ $currentProgres }}" aria-valuemin="0" aria-valuemax="100">
-                                                        <div class="progress-bar bg-success"
-                                                            style="width: {{ $currentProgres }}%">
-                                                            {{ $currentProgres }}%
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                <div class="progress" role="progressbar" aria-label="Success example"
-                                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                    <div class="progress-bar bg-success"
-                                                        style="width: {{ $init->reports->last()->actual }}%">
-                                                        {{ $init->reports->last()->actual }}%
-                                                    </div>
+                                            @if ($init->target_type != 'Precentage')
+                                            @php
+                                            $lastReportActual = $init->reports->last()->actual;
+                                            $currentProgres = ($lastReportActual/$init->target) * 100;
+                                            @endphp
+                                            <div class="progress" role="progressbar" aria-label="Success example"
+                                                aria-valuenow="{{ $currentProgres }}" aria-valuemin="0"
+                                                aria-valuemax="100">
+                                                <div class="progress-bar bg-success"
+                                                    style="width: {{ $currentProgres }}%">
+                                                    {{ $currentProgres }}%
                                                 </div>
-                                                @endif
+                                            </div>
+                                            @else
+                                            <div class="progress" role="progressbar" aria-label="Success example"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar bg-success"
+                                                    style="width: {{ $init->reports->last()->actual }}%">
+                                                    {{ $init->reports->last()->actual }}%
+                                                </div>
+                                            </div>
+                                            @endif
                                             @endif
                                         </td>
                                     </tr>
@@ -184,16 +209,39 @@
                                                 class="ti ti-edit"></i>
                                             Edit</a></li>
                                     <li>
-                                        <form action="{{ route('act.delete', ['id' => $act->id]) }}" method="POST"
+                                        <form id="deleteForm_{{ $act->id }}"
+                                            action="{{ route('act.delete', ['id' => $act->id]) }}" method="POST"
                                             style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger"
-                                                onclick="return confirm('Are you sure want to delete this?');">
+                                            <button type="button" class="dropdown-item text-danger"
+                                                onclick="confirmDelete('{{ $act->id }}')">
                                                 <i class="ti ti-trash-x"></i> Delete
                                             </button>
                                         </form>
                                     </li>
+
+                                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                    <script>
+                                    function confirmDelete(actId) {
+                                        Swal.fire({
+                                            title: 'Delete Activity',
+                                            text: 'Are you sure you want to delete this? If the activity already has initiatives, the data cannot be deleted.',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#d33',
+                                            cancelButtonColor: '#3085d6',
+                                            confirmButtonText: 'Delete',
+                                            customClass: {
+                                                popup: 'swal2-sm'
+                                            }
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('deleteForm_' + actId).submit();
+                                            }
+                                        });
+                                    }
+                                    </script>
                                     @endif
                                 </ul>
                             </div>
@@ -238,27 +286,28 @@
                                         <td>{{ $init->user->fullname }}</td>
                                         <td>
                                             @if ($init->reports && $lastReport = $init->reports->last())
-                                                @if ($init->target_type != 'Precentage')
-                                                @php 
-                                                    $lastReportActual = $init->reports->last()->actual;
-                                                    $currentProgres = ($lastReportActual/$init->target) * 100;
-                                                    @endphp
-                                                    <div class="progress" role="progressbar" aria-label="Success example"
-                                                        aria-valuenow="{{ $currentProgres }}" aria-valuemin="0" aria-valuemax="100">
-                                                        <div class="progress-bar bg-success"
-                                                            style="width: {{ $currentProgres }}%">
-                                                            {{ $currentProgres }}%
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                <div class="progress" role="progressbar" aria-label="Success example"
-                                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                    <div class="progress-bar bg-success"
-                                                        style="width: {{ $init->reports->last()->actual }}%">
-                                                        {{ $init->reports->last()->actual }}%
-                                                    </div>
+                                            @if ($init->target_type != 'Precentage')
+                                            @php
+                                            $lastReportActual = $init->reports->last()->actual;
+                                            $currentProgres = ($lastReportActual/$init->target) * 100;
+                                            @endphp
+                                            <div class="progress" role="progressbar" aria-label="Success example"
+                                                aria-valuenow="{{ $currentProgres }}" aria-valuemin="0"
+                                                aria-valuemax="100">
+                                                <div class="progress-bar bg-success"
+                                                    style="width: {{ $currentProgres }}%">
+                                                    {{ $currentProgres }}%
                                                 </div>
-                                                @endif
+                                            </div>
+                                            @else
+                                            <div class="progress" role="progressbar" aria-label="Success example"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar bg-success"
+                                                    style="width: {{ $init->reports->last()->actual }}%">
+                                                    {{ $init->reports->last()->actual }}%
+                                                </div>
+                                            </div>
+                                            @endif
                                             @endif
                                         </td>
                                     </tr>

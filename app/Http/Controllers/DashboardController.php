@@ -112,6 +112,37 @@ class DashboardController extends Controller
         'grandTotalProgres', 'data', 'inits', 'tasks', 'notYetTask'));
     }
 
+    public function donutChartDept() {
+        $divisis = Divisi::where('id', '!=', 1)->get();
+
+        foreach ($divisis as $div) {
+            $uncomplete = 0;
+            $complete = 0;
+            $progres = 0;
+            $total = 0;
+
+            foreach ($div->users as $staff) {
+                $total += optional($staff->initiatives)->count() ?? 0;
+
+                foreach ($staff->initiatives as $init) {
+                    if ($init->reports === null || $init->reports->last() === null) {
+                        $uncomplete++;
+                    } elseif ($init->reports->last()->actual == 100) {
+                        $complete++;
+                    } else {
+                        $progres++;
+                    }
+                }
+            }
+
+            $data = [
+                'series' => [$complete, $progres, $uncomplete],
+            ];
+        }
+
+        return response()->json($data);
+    }
+
     public function exportPdf() {
         $actWIG = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->get();
         $actIG = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->get();
@@ -154,12 +185,13 @@ class DashboardController extends Controller
             $grandTotalProgres += ($activity->weight / 100) * $progresActIG[$activity->id]; 
         }
 
-        return view('export-chart', compact('actWIG', 'actIG', 'progresActWIG', 'progresActIG', 
-        'grandTotalProgres'));
-
-        // $pdf = Pdf::loadView('export-chart', compact('actWIG', 'actIG', 'progresActWIG', 'progresActIG', 
+        // return view('export-chart', compact('actWIG', 'actIG', 'progresActWIG', 'progresActIG', 
         // 'grandTotalProgres'));
-        // return $pdf->download('activity.pdf');
+
+        $year = now()->format('Y');
+        $pdf = Pdf::loadView('export-chart', compact('actWIG', 'actIG', 'progresActWIG', 'progresActIG', 
+        'grandTotalProgres'));
+        return $pdf->download('Scoreboard_'.$year.'.pdf');
     }
 
     public function countMyTask()

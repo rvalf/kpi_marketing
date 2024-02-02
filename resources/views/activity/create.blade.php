@@ -27,34 +27,21 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="objective" class="form-label">Objective <span style="color: red;">*</span></label>
+                            <label for="objective" class="form-label">Objective <span
+                                    style="color: red;">*</span></label>
                             <textarea class="form-control" id="objective" name="objective"
-                                aria-describedby="textareaExplain" required></textarea>
+                                aria-describedby="textareaExplain" required>{{ old('objective') }}</textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="weight" class="form-label">Weight (Bobot) <span style="color: red;">*</span></label>
-                            <div class="input-group">
+                            <label for="weight" class="form-label">Weight (Bobot) <span
+                                    style="color: red;">*</span></label>
+                            <div class="input-group w-50">
                                 <input type="number" class="form-control" id="weight" name="weight"
-                                    aria-describedby="inputExplain" required>
+                                    aria-describedby="inputExplain" required value="{{ old('weight') }}">
                                 <span class="input-group-text">%</span><br>
                             </div>
                             <div id="inputExplain" class="form-text">Number input only, example: 20 (will be 20%).</div>
                         </div>
-                        <!-- <div class="mb-3">
-                            <label for="target_type" class="form-label">Target Type</label>
-                            <select id="target_type" class="form-select" name="target_type" required>
-                                <option value="">Select Type</option>
-                                <option value="Precentage">Precentage (%)</option>
-                                <option value="Number">Number (123)</option>
-                                <option value="Rupiah">Rupiah (Rp.)</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="target" class="form-label">Target</label>
-                            <input type="number" class="form-control" id="target" name="target"
-                                aria-describedby="inputExplain" required>
-                            <div id="inputExplain" class="form-text">Number input only, example: 20 (will be 20%).</div>
-                        </div> -->
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-primary">Submit</button>
                             <a href="{{ route('act.index') }}" class="btn btn-danger">Back</a>

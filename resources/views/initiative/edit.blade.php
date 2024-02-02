@@ -30,8 +30,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="weight" class="form-label">Weight</label>
-                            <input type="number" class="form-control" id="weight" name="weight"
-                                aria-describedby="inputExplain" value="{{ old('weight', $init->weight) }}">
+                            <div class="input-group w-50">
+                                <input type="number" class="form-control" id="weight" name="weight"
+                                    aria-describedby="inputExplain" value="{{ old('weight', $init->weight) }}">
+                                <span class="input-group-text">%</span><br>
+                            </div>
                             <div id="inputExplain" class="form-text">Number input only, example: 20 (will be 20%).</div>
                             @error('weight')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -94,8 +97,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php 
-                                $act = $init->activity;
+                            @php
+                            $act = $init->activity;
                             @endphp
                             @foreach ($act->initiatives as $in)
                             <tr class="{{ $in->id === $init->id ? 'bg-success wig' : '' }}">

@@ -21,11 +21,10 @@
             <table id="tableStaff" class="table table-sm table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th scope="col" width="30">No</th>
-                        <th scope="col">NPK</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Department</th>
+                        <th scope="col" width="30" class="text-center">No</th>
+                        <th scope="col" class="text-center">NPK</th>
+                        <th scope="col" class="text-center">Name</th>
+                        <th scope="col" class="text-center">Department</th>
                         <th scope="col" class="text-center">Account</th>
                         <th scope="col" class="text-center">Delete</th>
                     </tr>
@@ -41,11 +40,10 @@
                         <td class="text-center auto-number"></td>
                         <td>{{ $staff->npk }}</td>
                         <td>{{ $staff->fullname }}</td>
-                        <td>{{ $staff->email }}</td>
                         <td>{{ $staff->divisi->name }}</td>
                         <td class="text-center">
                             <button data-bs-toggle="modal" data-bs-target="#showModal_{{ $staff->id }}"
-                                class="btn btn-sm btn-secondary"><i class="ti ti-eye"></i> Show</button>
+                                class="btn btn-sm btn-secondary"><i class="ti ti-eye"></i></button>
                         </td>
                         <div class="modal fade" id="showModal_{{ $staff->id }}" tabindex="-1"
                             aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,16 +81,40 @@
                             </div>
                         </div>
                         <td class="text-center">
-                            <form action="{{ route('staff.delete', ['id' => $staff->id]) }}" method="POST"
+                            <form id="deleteForm_{{ $staff->id }}"
+                                action="{{ route('staff.delete', ['id' => $staff->id]) }}" method="POST"
                                 style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Are you sure want to delete this?');">
-                                    <i class="ti ti-trash-x"></i>Nonactive
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                    onclick="confirmDelete('{{ $staff->id }}')">
+                                    <i class="ti ti-trash-x"></i>
                                 </button>
                             </form>
                         </td>
+
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <script>
+                        function confirmDelete(staffId) {
+                            Swal.fire({
+                                title: 'Delete Staff',
+                                text: 'Staff will be disabled. Are you sure you want to delete this?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Delete',
+                                customClass: {
+                                    popup: 'swal2-sm'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.getElementById('deleteForm_' + staffId).submit();
+                                }
+                            });
+                        }
+                        </script>
+
                     </tr>
                     @endforeach
                 </tbody>

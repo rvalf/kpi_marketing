@@ -154,6 +154,55 @@ class PerformanceReportController extends Controller
         return response()->json($datautama);
     }
 
+    public function getDataExportWIG($activity_id) {
+        $act = Activity::where('status', $this->wig)->whereYear('created_at', now()->year)->findOrFail($activity_id);
+
+        $datawig = [];
+        foreach ($act->initiatives as $init) {
+            $lastReport = $init->reports->last();
+            $progres = $lastReport ? $lastReport->actual : 0;
+            if ($init->target_type != 'Precentage') {
+                $progres = ($progres / $init->target) * 100;
+            }
+            $datawig = [$init->initiative, 100, intval($progres)];
+        }
+        
+        dd($datawig);
+        return response()->json($datawig);
+    }
+
+    public function getDataExportIG() {
+        $acts = Activity::where('status', $this->ig)->whereYear('created_at', now()->year)->get();
+
+        foreach ($acts as $act) {
+            $planningSeries = []; // [20, 40]
+            $actualSeries = []; // [20, 35]
+            $monthxaxis = []; // ['Jan', 'Feb']
+    
+            foreach ($act->initiatives as $init) {
+                $lastReport = $init->reports->last();
+                $progres = $lastReport ? $lastReport->actual : 0;
+                if ($init->target_type != 'Precentage') {
+                    $progres = ($progres / $init->target) * 100;
+                }
+                $actualSeries[] = $progres;
+                $planningSeries[] = 100;
+                $monthxaxis[] = strlen($init->initiative) > 10 ? substr($init->initiative, 0, 10) . '...' : $init->initiative;
+            }
+    
+            $datautama[] = [
+                'series' => [
+                    ['name' => 'Target', 'data' => $planningSeries],
+                    ['name' => 'Progres', 'data' => $actualSeries],
+                ],
+                'monthxaxis' => $monthxaxis,
+                'yaxis' => intval($act->target),
+            ];
+        }
+        
+        return response()->json($datautama);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

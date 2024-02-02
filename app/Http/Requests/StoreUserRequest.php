@@ -26,7 +26,7 @@ class StoreUserRequest extends FormRequest
         return [
             'username' => ['required', 'unique:users', 'string', 'min:8', 'regex:/^\S*$/u'],
             'email' => ['required', 'unique:users', 'string', 'max:255', 'email', function ($attribute, $value, $fail) {
-                $allowedDomains = ['gmail.com', 'yahoo.com']; // Sesuaikan dengan daftar domain yang diizinkan
+                $allowedDomains = ['gmail.com', 'yahoo.com', 'yahoo.co.id', 'outlook.com', 'polman.astra.ac.id', 'polytechnic.astra.ac.id']; // Sesuaikan dengan daftar domain yang diizinkan
             
                 $domain = explode('@', $value)[1];
             
@@ -34,7 +34,7 @@ class StoreUserRequest extends FormRequest
                     $fail($attribute.' is not a valid email domain.');
                 }
             }],
-            'npk' => ['required', 'string', 'unique:users'],
+            'npk' => ['required', 'string', 'unique:users', 'min:5'],
             'fullname' => ['required', 'string', 'max:255'],
             'divisi_id' => ['required'],
         ];

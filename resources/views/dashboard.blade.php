@@ -107,6 +107,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <div id="deptTask_{{ $loop->index }}"></div>
+                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -116,7 +119,7 @@
                 <div class="card-body p-4 shadow-sm">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="card-title fw-bolder">Score Board</h5>
-                        <a href="" class="btn btn-dark"> <i class="ti ti-file-export"></i> Export to PDF</a>
+                        <a href="{{ route('export.pdf') }}" class="btn btn-dark"> <i class="ti ti-file-export"></i> Export to PDF</a>
                     </div>
                     @foreach ($actWIG as $act)
                     <div class="card border-grey shadow mb-3">

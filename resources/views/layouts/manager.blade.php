@@ -30,6 +30,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 
+    <!-- SWAL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+
     <!-- jQuery -->
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -85,6 +88,7 @@
 </head>
 
 <body>
+
     <body>
         <!--  Body Wrapper -->
         <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -226,8 +230,10 @@
         <script src="{{ asset('assets/libs/simplebar/dist/simplebar.js') }}"></script>
         <script src="{{ asset('assets/js/dashboard.js') }}"></script>
         <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+        <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
         $(document).ready(function() {
@@ -235,16 +241,20 @@
 
             // Update nomor otomatis saat setiap kali tabel di-sort
             tableDivisi.on('order.dt search.dt', function() {
-                tableDivisi.column(0, { order: 'applied' }).nodes().each(function(cell, i) {
+                tableDivisi.column(0, {
+                    order: 'applied'
+                }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1;
                 });
             }).draw();
-            
+
             var tableStaff = $('#tableStaff').DataTable();
 
             // Update nomor otomatis saat setiap kali tabel di-sort
             tableStaff.on('order.dt search.dt', function() {
-                tableStaff.column(0, { order: 'applied' }).nodes().each(function(cell, i) {
+                tableStaff.column(0, {
+                    order: 'applied'
+                }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1;
                 });
             }).draw();
